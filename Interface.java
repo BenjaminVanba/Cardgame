@@ -4,6 +4,8 @@ public class Interface {
         System.out.println("Hello, prout!");
 
         System.out.println("Hello, rachid!");
+        System.out.println("Hello, test!");
+        System.out.println("Hello, test2!");
 
     }
 }
