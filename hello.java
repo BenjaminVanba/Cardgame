@@ -13,6 +13,9 @@ public class hello {
         System.out.println("Hello, World!////");
 
         System.out.println("Hello, World!////");
+        System.out.println("bonjour rachid");
+
+        System.out.println("Hello, World!////");
 
     }
 }
