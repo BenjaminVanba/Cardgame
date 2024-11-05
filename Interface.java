@@ -5,7 +5,8 @@ public class Interface {
 
         System.out.println("Hello, rachid!");
         System.out.println("Hello, test!");
-        System.out.println("Hello, test2!");
+        System.out.println("Hello, test8!");
+        System.out.println("Hello, !");
 
     }
 }
