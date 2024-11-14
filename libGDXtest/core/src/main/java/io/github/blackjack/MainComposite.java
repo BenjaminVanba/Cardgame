@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainComposite extends Actor {
-    private List<Actor> renderComponents; // Liste des composants d'affichage
+    private List<Actor> renderComponents;
 
     public MainComposite() {
         renderComponents = new ArrayList<>();
@@ -18,10 +18,20 @@ public class MainComposite extends Actor {
         renderComponents.add(component);
     }
 
-    // Gérer le rendu pour chaque composant ajouté
+    // Rendre les composants sur le stage
     public void render(Stage stage) {
         for (Actor component : renderComponents) {
             stage.addActor(component);
         }
+    }
+
+    // Récupérer un composant spécifique (ici, le menu par exemple)
+    public Actor getComponent(int index) {
+        return renderComponents.get(index);
+    }
+
+    // Effacer tous les composants
+    public void clearComponents() {
+        renderComponents.clear();
     }
 }

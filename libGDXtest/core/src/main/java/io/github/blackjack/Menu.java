@@ -4,9 +4,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Menu extends Window {
+
+    private TextButton optionsButton;
 
     public Menu(Skin skin) {
         super("Menu", skin, "border");
@@ -18,7 +19,7 @@ public class Menu extends Window {
         add("Bienvenue dans le jeu!").row();
 
         TextButton startButton = new TextButton("Commencer la partie", skin);
-        TextButton optionsButton = new TextButton("Options", skin);
+        optionsButton = new TextButton("Options", skin); // Ajout du bouton Options
         TextButton quitButton = new TextButton("Quitter", skin);
 
         add(startButton).row();
@@ -26,12 +27,11 @@ public class Menu extends Window {
         add(quitButton).row();
 
         pack();
+        setPosition(MathUtils.roundPositive(getWidth() / 2f - getWidth() / 2f),
+                MathUtils.roundPositive(getHeight() / 2f - getHeight() / 2f));
     }
 
-    public void centerMenu(Stage stage) {
-        // Calculer le centre de la scène et positionner le menu en conséquence
-        float x = (stage.getWidth() - getWidth()) / 2f;
-        float y = (stage.getHeight() - getHeight()) / 2f;
-        setPosition(x, y);
+    public TextButton getOptionsButton() {
+        return optionsButton; // Getter pour le bouton Options
     }
 }
