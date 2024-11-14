@@ -44,10 +44,14 @@ public class Hand {
 
     public boolean isBlackJack() {
         if (cards.size() == 2) { // Vérifie qu'il y a exactement deux cartes
-            Card firstCard = cards.get(0);
-            Card secondCard = cards.get(1);
-            return firstCard.isAce() && secondCard.isHead();
+            if (scores.get(0) == 21 | scores.get(1) == 21) {
+                return true;
+            }
         }
         return false;
+    }
+
+    public boolean isBurnt() {
+        return scores.get(0) > 21 && this.isBlackJack() == false;
     }
 }
