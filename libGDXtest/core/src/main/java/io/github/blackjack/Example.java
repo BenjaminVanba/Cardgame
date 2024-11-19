@@ -1,6 +1,5 @@
 package io.github.blackjack;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Example {
@@ -13,6 +12,10 @@ public class Example {
         // Bienvenue dans le casino
         System.out.println(
                 "Bienvenu dans le casino '" + casino.getName() + "'. Ça compte en " + casino.getDevice() + " ici.");
+
+        // Création du deck avec 6 paquets
+        Deck deck = DeckFactory.createDeck(1);
+        System.out.println("Deck initialisé avec " + deck.getRemainingCards() + " cartes.\n");
 
         // Instanciation du croupier
         AIPlayer croupier = new AIPlayer("JackLeCroupier");
@@ -36,21 +39,23 @@ public class Example {
             }
 
             // Distribution des cartes initiales
-            croupierHand.addCard(new Card(false));
-            croupierHand.addCard(new Card(true));
-            joueurHand.addCard(new Card(false));
-            joueurHand.addCard(new Card(false));
+            croupierHand.drawFromDeck(deck);
+            croupierHand.drawFromDeck(deck);
+            joueurHand.drawFromDeck(deck);
+            joueurHand.drawFromDeck(deck);
 
             System.out.println("\nCroupier: " + croupierHand.getCardsString() + " " + croupierHand.getScores());
             System.out.println("Joueur  : " + joueurHand.getCardsString() + " " + joueurHand.getScores());
 
+            boolean isRoundStillGoing = true;
+
             // Vérifier si le joueur a un blackjack
             if (joueurHand.isBlackJack()) {
                 System.out.println("\nT'es un monstre !!! Blackjack !");
+                isRoundStillGoing = false;
             }
 
             // Gestion des choix du joueur
-            boolean isRoundStillGoing = true;
             while (isRoundStillGoing) {
                 System.out.println("\nDistribuer ou Rester ?: ");
                 String choice = scanner.nextLine();
@@ -58,7 +63,7 @@ public class Example {
                 if (choice.equals("R")) {
                     isRoundStillGoing = false; // Le joueur choisit de rester
                 } else {
-                    joueurHand.addCard(new Card(false));
+                    joueurHand.drawFromDeck(deck);
                     System.out.println("\nCroupier: " + croupierHand.getCardsString() + " " + croupierHand.getScores());
                     System.out.println("Joueur  : " + joueurHand.getCardsString() + " " + joueurHand.getScores());
                     if (joueurHand.isBurnt()) {
@@ -72,18 +77,37 @@ public class Example {
             croupierHand.unhideCard();
             System.out.println("\nCroupier: " + croupierHand.getCardsString() + " " + croupierHand.getScores());
 
-            while ((croupierHand.getMinValue() < 17 || croupierHand.getMaxValue() < 17) &&
-                    (croupierHand.getMinValue() <= joueurHand.getMaxValue()) &&
-                    !croupierHand.isBurnt()) {
-                croupierHand.addCard(new Card(false));
+            while (true) {
+                // Scores valides pour le joueur et le croupier
+                int joueurValidScore = joueurHand.getMaxValue() <= 21 ? joueurHand.getMaxValue()
+                        : joueurHand.getMinValue();
+                int croupierValidScore = croupierHand.getMaxValue() <= 21 ? croupierHand.getMaxValue()
+                        : croupierHand.getMinValue();
+
+                // Le croupier s'arrête immédiatement s'il a 21
+                if (croupierValidScore == 21) {
+                    System.out.println("\nCroupier a atteint un score de 21.");
+                    break;
+                }
+
+                // Vérification si le croupier doit continuer à tirer
+                if (croupierValidScore >= 17 || croupierValidScore > joueurValidScore || croupierHand.isBurnt()) {
+                    break; // Le croupier arrête de tirer
+                }
+
+                // Le croupier tire une carte
+                croupierHand.drawFromDeck(deck);
                 System.out.println("\nCroupier: " + croupierHand.getCardsString() + " " + croupierHand.getScores());
-                System.out.println("Joueur  : " + joueurHand.getCardsString() + " " + joueurHand.getScores());
             }
 
             // Déterminer le gagnant
-            if (croupierHand.isBurnt() || joueurHand.getMaxValue() > croupierHand.getMaxValue()) {
+            int joueurValidScore = joueurHand.getMaxValue() <= 21 ? joueurHand.getMaxValue() : joueurHand.getMinValue();
+            int croupierValidScore = croupierHand.getMaxValue() <= 21 ? croupierHand.getMaxValue()
+                    : croupierHand.getMinValue();
+
+            if (croupierHand.isBurnt() || (joueurValidScore > croupierValidScore && joueurValidScore <= 21)) {
                 System.out.println("\nFélicitations, " + joueur.getName() + " a gagné !");
-            } else if (joueurHand.getMaxValue() == croupierHand.getMaxValue()) {
+            } else if (joueurValidScore == croupierValidScore && joueurValidScore <= 21) {
                 System.out.println("\nÉgalité !");
             } else {
                 System.out.println("\nDésolé, " + joueur.getName() + ", le croupier a gagné.");

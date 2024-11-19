@@ -81,4 +81,9 @@ public class Hand {
     public int getMaxValue() {
         return scores.stream().max(Integer::compareTo).orElse(0);
     }
+
+    public void drawFromDeck(Deck deck) {
+        this.addCard(deck.drawCard());
+    }
+
 }

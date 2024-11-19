@@ -10,11 +10,11 @@ public class Card {
     protected String suit;
     protected boolean hidden = true;
 
-    private static final String[] SUITS = { "Cœurs", "Carreaux", "Trèfles", "Piques" };
-    private static final String[] RANKS = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
-    private static final int[] VALUES = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
+    protected static final String[] SUITS = { "Cœurs", "Carreaux", "Trèfles", "Piques" };
+    protected static final String[] RANKS = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
+    protected static final int[] VALUES = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
 
-    private static final Map<String, Integer> rankValueMap = new HashMap<>();
+    protected static final Map<String, Integer> rankValueMap = new HashMap<>();
 
     // Initialisation statique pour remplir la map des valeurs
     static {
