@@ -31,25 +31,21 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        // Charger la texture de l'arrière-plan
         backgroundTexture = new Texture(Gdx.files.internal("Background2.png"));
 
-        // Créer les boutons
         startButton = new TextButton("Commencer la partie", skin);
         optionsButton = new TextButton("Options", skin);
         quitButton = new TextButton("Quitter", skin);
 
-        // Positionner les boutons
         startButton.setSize(200, 50);
-        startButton.setPosition(300, 270); // Position relative à la taille du viewport
+        startButton.setPosition(300, 270);
 
         optionsButton.setSize(200, 50);
-        optionsButton.setPosition(300, 210); // Position relative à la taille du viewport
+        optionsButton.setPosition(300, 210);
 
         quitButton.setSize(200, 50);
-        quitButton.setPosition(300, 150); // Position relative à la taille du viewport
+        quitButton.setPosition(300, 150);
 
-        // Ajouter les boutons à la scène
         stage.addActor(startButton);
         stage.addActor(optionsButton);
         stage.addActor(quitButton);
@@ -68,7 +64,6 @@ public class MenuScreen implements Screen {
             }
         });
 
-        // Listener pour le bouton "Quitter"
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -76,17 +71,14 @@ public class MenuScreen implements Screen {
             }
         });
 
-        // Initialiser la taille et la position de l'arrière-plan
     }
 
     @Override
     public void render(float delta) {
-        // Dessiner l'arrière-plan
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
-        // Mettre à jour et dessiner la scène
         stage.act(delta);
         stage.draw();
     }

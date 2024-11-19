@@ -35,23 +35,18 @@ public class SettingsScreen implements Screen {
     public void show() {
         backgroundTexture = new Texture(Gdx.files.internal("Background2.png"));
 
-        // Créer un slider de volume
         volumeSlider = new Slider(0, 1, 0.01f, false, skin);
-        volumeSlider.setValue(main.getBackgroundMusic().getVolume()); // Initialiser le slider avec le volume actuel
+        volumeSlider.setValue(main.getBackgroundMusic().getVolume());
 
-        // Ajouter un listener au slider pour ajuster le volume de la musique de fond
         volumeSlider.addListener(event -> {
             main.getBackgroundMusic().setVolume(volumeSlider.getValue());
             return false;
         });
 
-        // Créer un label "Volume"
         Label volumeLabel = new Label("Volume", skin);
 
-        // Créer un bouton "Retour"
         backButton = new TextButton("Retour", skin);
 
-        // Ajouter un listener au bouton "Retour" pour revenir au menu principal
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -59,7 +54,6 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        // Ajouter les éléments à la scène
         Table table = new Table();
         table.setFillParent(true);
         table.add(volumeLabel).padBottom(10);
@@ -74,12 +68,10 @@ public class SettingsScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Dessiner l'arrière-plan
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
-        // Mettre à jour et dessiner la scène
         stage.act(delta);
         stage.draw();
     }
