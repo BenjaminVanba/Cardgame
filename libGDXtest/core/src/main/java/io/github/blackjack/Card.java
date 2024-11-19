@@ -30,8 +30,15 @@ public class Card {
         this.suit = SUITS[random.nextInt(SUITS.length)];
     }
 
+    public Card(boolean hidden) {
+        Random random = new Random();
+        this.rank = RANKS[random.nextInt(RANKS.length)];
+        this.value = rankValueMap.get(this.rank);
+        this.suit = SUITS[random.nextInt(SUITS.length)];
+        this.hidden = hidden;
+    }
+
     public Card(String rank, String suit, boolean hidden) {
-        System.out.println("La carte que tu vas donner vaut " + rankValueMap.get(rank));
         this.value = rankValueMap.get(rank);
         this.rank = rank;
         this.suit = suit;

@@ -15,7 +15,7 @@ public class Hand {
         // doit loop dans les cartes et écrire leur info
     }
 
-    public List<Integer> getValue() {
+    public List<Integer> getScores() {
         return this.scores;
     }
 
@@ -23,18 +23,35 @@ public class Hand {
         return this.cards;
     }
 
+    public void unhideCard() {
+        for (Card card : this.cards) {
+            card.hidden = false; // Mettre `hidden` à `false` pour chaque carte
+        }
+    }
+
+    public String getCardsString() {
+        StringBuilder result = new StringBuilder();
+        for (Card card : this.cards) {
+            if (!card.hidden) {
+                result.append(card.rank).append(" de ").append(card.suit).append(", ");
+            } else {
+                result.append("Carte cachée, ");
+            }
+        }
+        // Retirer la dernière virgule et l'espace
+        if (result.length() > 0) {
+            result.setLength(result.length() - 2);
+        }
+        return result.toString();
+    }
+
     public void addCard(Card card) {
         this.cards.add(card);
 
         // Si la carte ajoutée est un As
         if (card.isAce()) {
-            if (cards.size() == 1) { // Vérifie si c'est la première carte de la main
-                scores.set(0, 1); // Compte l'As comme 11 pour le premier score
-                scores.set(1, 11); // Compte également l'As comme 11 pour le deuxième score
-            } else {
-                scores.set(0, scores.get(0) + 1);
-                scores.set(1, scores.get(1) + 1);
-            }
+            scores.set(0, scores.get(0) + 1);
+            scores.set(1, scores.get(1) + 11);
         } else {
             int cardValue = card.getValue(); // Récupère la valeur de la carte
             scores.set(0, scores.get(0) + cardValue); // Ajoute la valeur au premier score
@@ -52,6 +69,16 @@ public class Hand {
     }
 
     public boolean isBurnt() {
-        return scores.get(0) > 21 && this.isBlackJack() == false;
+        return scores.get(0) > 21 && scores.get(1) > 21 && this.isBlackJack() == false;
+    }
+
+    // Retourne la valeur minimale dans la liste de scores
+    public int getMinValue() {
+        return scores.stream().min(Integer::compareTo).orElse(0);
+    }
+
+    // Retourne la valeur maximale dans la liste de scores
+    public int getMaxValue() {
+        return scores.stream().max(Integer::compareTo).orElse(0);
     }
 }
