@@ -69,12 +69,4 @@ public class Card {
         }
 
     }
-
-    public boolean isHead() {
-        if (this.value == 10 && !this.rank.equals("A")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
