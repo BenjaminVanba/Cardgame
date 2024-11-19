@@ -17,7 +17,6 @@ public class Main extends Game {
     public void showGameScreen() {
         setScreen(new GameScreen(this, this.skin)); // , settings));
     }
-
     // public void setSettings(Settings settings) {
     // this.settings = settings;
     // }
