@@ -61,6 +61,13 @@ public class MenuScreen implements Screen {
             }
         });
 
+        optionsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.SettingsScreen();
+            }
+        });
+
         // Listener pour le bouton "Quitter"
         quitButton.addListener(new ClickListener() {
             @Override
