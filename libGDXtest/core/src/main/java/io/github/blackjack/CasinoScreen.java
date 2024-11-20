@@ -35,28 +35,22 @@ public class CasinoScreen implements Screen {
 
     @Override
     public void show() {
-        // Load the background texture
         backgroundTexture = new Texture(Gdx.files.internal("Background2.png"));
 
-        // Load casino images
         casino1Texture = new Texture(Gdx.files.internal("CasinoPourri.png"));
         casino2Texture = new Texture(Gdx.files.internal("CasinoPremium.png"));
 
-        // Create Image actors
         casino1Image = new Image(casino1Texture);
         casino2Image = new Image(casino2Texture);
 
-        // Set sizes for the images
         float imageWidth = 200;
         float imageHeight = 200;
         casino1Image.setSize(imageWidth, imageHeight);
         casino2Image.setSize(imageWidth, imageHeight);
 
-        // Set origin to center for scaling
         casino1Image.setOrigin(Align.center);
         casino2Image.setOrigin(Align.center);
 
-        // Position images side by side with a separation
         float separation = 50;
         float totalWidth = imageWidth * 2 + separation;
         float startX = (800 - totalWidth) / 2;
@@ -65,7 +59,6 @@ public class CasinoScreen implements Screen {
         casino1Image.setPosition(startX, posY);
         casino2Image.setPosition(startX + imageWidth + separation, posY);
 
-        // Add click listeners to images
         casino1Image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -80,7 +73,6 @@ public class CasinoScreen implements Screen {
             }
         });
 
-        // Add hover effect to images
         casino1Image.addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -105,22 +97,18 @@ public class CasinoScreen implements Screen {
             }
         });
 
-        // Add images to the stage
         stage.addActor(casino1Image);
         stage.addActor(casino2Image);
     }
 
     @Override
     public void render(float delta) {
-        // Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Draw the background
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
-        // Update and draw the stage
         stage.act(delta);
         stage.draw();
     }
