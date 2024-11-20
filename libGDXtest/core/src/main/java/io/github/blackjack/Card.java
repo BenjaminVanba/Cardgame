@@ -66,7 +66,6 @@ public class Card {
         this.hiddenCardTexturePath = "Cards/hidden_white.png";
     }
 
-
     public Card(boolean hidden) {
         Random random = new Random();
         this.rank = RANKS[random.nextInt(RANKS.length)];
@@ -106,6 +105,10 @@ public class Card {
      */
     public String getSuit() {
         return suit;
+    }
+
+    public int getValue() {
+        return this.value;
     }
 
     public String getCardTexturePath() {
