@@ -1,12 +1,47 @@
+// Assurez-vous que le plugin Java est appliqué
+apply plugin: 'java'
+
+// Définir l'encodage pour les compilations Java
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// Nom du projet Eclipse
 eclipse.project.name = appName + '-core'
 
+// Dépendances du projet
 dependencies {
-  api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
-  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
+    api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-  if(enableGraalNative == 'true') {
-    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
-  }
+    if (enableGraalNative == 'true') {
+        implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+    }
+}
+
+// Tâche pour générer la documentation Javadoc
+task generateJavadoc(type: Javadoc) {
+    // Définir les sources à documenter
+    source = sourceSets.main.allJava
+
+    // Inclure les dépendances dans le classpath en utilisant 'compileClasspath'
+    classpath = sourceSets.main.compileClasspath
+
+    // Options de configuration de Javadoc
+    options.memberLevel = JavadocMemberLevel.PUBLIC
+    options.encoding = 'UTF-8'
+    options.links += 'https://libgdx.badlogicgames.com/nightlies/docs/api/'
+
+    // Répertoire de destination pour la documentation générée
+    destinationDir = file("$buildDir/docs/javadoc")
+
+    // Optionnel : ne pas échouer en cas d'erreurs mineures
+    failOnError false
+
+    // Optionnel : Afficher les avertissements de Javadoc
+    options.addBooleanOption('Xdoclint:none', true)
+}
+
+// Optionnel : Ajouter une tâche pour nettoyer les documents Javadoc générés
+task cleanJavadoc(type: Delete) {
+    delete "$buildDir/docs/javadoc"
 }
