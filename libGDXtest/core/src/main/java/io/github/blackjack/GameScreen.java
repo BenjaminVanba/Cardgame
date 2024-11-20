@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -16,94 +16,126 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class GameScreen implements Screen {
     private Main main;
     private Stage stage;
-    private Texture cardTexture;
     private Texture backgroundTexture;
-    private Image cardImage;
     private SpriteBatch batch;
-    private TextButton backButton;
+    private TextButton backButton, betButton, hitButton, standButton;
+    private GameLogic gameLogic;
+    private Label resultLabel; // Pour afficher le message
 
     public GameScreen(Main main, Skin skin) {
         this.main = main;
-        this.stage = new Stage(new FitViewport(800, 480));
+        this.stage = new Stage(new FitViewport(1960, 1080));
         Gdx.input.setInputProcessor(stage);
         this.batch = new SpriteBatch();
 
-        // Créer le bouton "Retour au menu"
         backButton = new TextButton("Retour au menu", skin);
-
-        // Positionner le bouton en haut à droite de l'écran
         backButton.setSize(150, 50);
-        backButton.setPosition(800 - backButton.getWidth() - 10, 480 - backButton.getHeight() - 10);
-
-        // Ajouter le bouton à la scène
+        backButton.setPosition(1960 - backButton.getWidth() - 10, 1080 - backButton.getHeight() - 10);
         stage.addActor(backButton);
-
-        // Ajouter un listener au bouton pour revenir au menu principal
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.setScreen(new MenuScreen(main, skin));
             }
         });
-    }
 
-    @Override
-    public void show() {
-        backgroundTexture = new Texture(Gdx.files.internal("Background.jpg"));
-        cardTexture = new Texture(Gdx.files.internal("Cards/Clovers_2_white.png"));
-        cardImage = new Image(cardTexture);
+        betButton = new TextButton("Mise", skin);
+        betButton.setSize(150, 50);
+        betButton.setPosition(10, 10);
+        stage.addActor(betButton);
 
-        // Ajuster la taille de l'image pour qu'elle fasse un quart de l'écran
-        float cardWidth = 100; // Par exemple, 1/4 de la largeur de l'écran
-        float cardHeight = 200; // Par exemple, 1/2 de la hauteur de l'écran
-        cardImage.setSize(cardWidth, cardHeight);
+        hitButton = new TextButton("Distribuer", skin);
+        hitButton.setSize(150, 50);
+        hitButton.setPosition(200, 10);
+        stage.addActor(hitButton);
 
-        // Positionner la carte au centre de l'écran
-        cardImage.setPosition((800 - cardWidth) / 2, (480 - cardHeight) / 2);
+        standButton = new TextButton("Rester", skin);
+        standButton.setSize(150, 50);
+        standButton.setPosition(400, 10);
+        stage.addActor(standButton);
 
-        // Ajouter la carte à la scène
-        stage.addActor(cardImage);
+        gameLogic = new GameLogic(stage);
+        stage.addActor(gameLogic);
+
+        resultLabel = new Label("", skin);
+        resultLabel.setPosition(1960 / 2 - 100, 1080 / 2);
+        stage.addActor(resultLabel);
+
+        betButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameLogic.distributeInitialCards();
+                resultLabel.setText("");
+            }
+        });
+
+        hitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameLogic.playerHits();
+                resultLabel.setText(gameLogic.getResultMessage());
+            }
+        });
+
+        standButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameLogic.playerStands();
+                resultLabel.setText(gameLogic.getResultMessage());
+            }
+        });
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // Dessiner l'arrière-plan
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
-        // Mettre à jour et dessiner la scène
         stage.act(delta);
         stage.draw();
     }
 
     @Override
+    public void show() {
+        // Charger l'arrière-plan si ce n'est pas déjà fait
+        if (backgroundTexture == null) {
+            backgroundTexture = new Texture(Gdx.files.internal("Background.jpg"));
+        }
+
+        // Vous pouvez initialiser ici d'autres ressources ou éléments spécifiques au
+        // moment
+        // où cet écran devient actif
+    }
+
+    @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-        // Recalculer la position du bouton pour qu'il reste en haut à droite
-        // backButton.setPosition(width - backButton.getWidth() - 10, height -
-        // backButton.getHeight() - 10);
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'resize'");
     }
 
     @Override
     public void pause() {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'pause'");
     }
 
     @Override
     public void resume() {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'resume'");
     }
 
     @Override
     public void hide() {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'hide'");
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
-        cardTexture.dispose();
-        backgroundTexture.dispose();
-        batch.dispose();
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'dispose'");
     }
 }

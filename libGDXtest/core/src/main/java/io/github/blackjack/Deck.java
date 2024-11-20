@@ -10,6 +10,22 @@ public class Deck {
 
     public Deck() {
         this.cards = new ArrayList<>();
+
+        // Ajouter manuellement toutes les cartes (4 couleurs * 13 rangs)
+        String[] suits = { "Piques", "Coeurs", "Carreaux", "Trefles" };
+        String[] ranks = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
+
+        for (String suit : suits) {
+            for (String rank : ranks) {
+                this.cards.add(new Card(rank, suit, false)); // `false` signifie que la carte n'est pas cachée
+            }
+        }
+
+        // Mélanger le deck
+        Collections.shuffle(this.cards);
+
+        // TODO @RH: Create shuffled 52 cards deck
+
     }
 
     // Ajouter une carte au deck

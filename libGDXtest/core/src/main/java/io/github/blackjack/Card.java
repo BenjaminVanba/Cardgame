@@ -9,8 +9,11 @@ public class Card {
     protected String rank;
     protected String suit;
     protected boolean hidden = true;
+    protected String CardTexturePath;
+    protected String hiddenCardTexturePath;
+    protected String shownCardTexturePath;
 
-    protected static final String[] SUITS = { "Cœurs", "Carreaux", "Trèfles", "Piques" };
+    protected static final String[] SUITS = { "Coeurs", "Carreaux", "Trefles", "Piques" };
     protected static final String[] RANKS = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
     protected static final int[] VALUES = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
 
@@ -28,6 +31,8 @@ public class Card {
         this.rank = RANKS[random.nextInt(RANKS.length)];
         this.value = rankValueMap.get(this.rank);
         this.suit = SUITS[random.nextInt(SUITS.length)];
+        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
+        this.hiddenCardTexturePath = "Cards/hidden_white.png";
     }
 
     public Card(boolean hidden) {
@@ -36,6 +41,8 @@ public class Card {
         this.value = rankValueMap.get(this.rank);
         this.suit = SUITS[random.nextInt(SUITS.length)];
         this.hidden = hidden;
+        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
+        this.hiddenCardTexturePath = "Cards/hidden_white.png";
     }
 
     public Card(String rank, String suit, boolean hidden) {
@@ -43,6 +50,8 @@ public class Card {
         this.rank = rank;
         this.suit = suit;
         this.hidden = hidden;
+        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
+        this.hiddenCardTexturePath = "Cards/hidden_white.png";
     }
 
     public void DisplayInfo(Card card) {
@@ -59,6 +68,18 @@ public class Card {
 
     public String getSuit() {
         return this.suit;
+    }
+
+    public String getCardTexturePath() {
+        return this.CardTexturePath;
+    }
+
+    public String gethiddenCardTexturePath() {
+        return this.hiddenCardTexturePath;
+    }
+
+    public boolean isHidden() {
+        return this.hidden;
     }
 
     public boolean isAce() {
