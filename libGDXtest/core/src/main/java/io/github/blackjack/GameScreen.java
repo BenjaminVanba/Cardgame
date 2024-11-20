@@ -17,8 +17,8 @@ public class GameScreen implements Screen {
     private Main main;
     private Stage stage;
     private Texture cardTexture;
-    private Texture backgroundTexture;
     private Image cardImage;
+    private Texture backgroundTexture;
     private SpriteBatch batch;
     private TextButton backButton;
 

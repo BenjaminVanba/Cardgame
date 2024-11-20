@@ -21,6 +21,10 @@ public class Main extends Game {
         setScreen(new MenuScreen(this, this.skin));
     }
 
+    public void showCasinoScreen() {
+        setScreen(new CasinoScreen(this, this.skin));
+    }
+
     public void showGameScreen() {
         setScreen(new GameScreen(this, this.skin));
     }
