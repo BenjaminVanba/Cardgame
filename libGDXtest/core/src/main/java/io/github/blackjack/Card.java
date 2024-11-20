@@ -4,10 +4,37 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Map;
 
+/**
+ * La classe {@code Card} représente une carte dans le jeu de Blackjack.
+ * Chaque carte a une valeur, un rang, une couleur (suit) et peut être cachée ou
+ * visible.
+ * 
+ * <p>
+ * Cette classe permet de créer des instances de cartes avec des rangs et des
+ * couleurs aléatoires.
+ * </p>
+ * 
+ * @see Player
+ */
 public class Card {
+    /**
+     * La valeur numérique de la carte.
+     */
     protected int value;
+
+    /**
+     * Le rang de la carte (par exemple, "2", "J", "A").
+     */
     protected String rank;
+
+    /**
+     * La couleur de la carte (Cœurs, Carreaux, Trèfles, Piques).
+     */
     protected String suit;
+
+    /**
+     * Indique si la carte est cachée (true) ou visible (false).
+     */
     protected boolean hidden = true;
     protected String CardTexturePath;
     protected String hiddenCardTexturePath;
@@ -26,6 +53,10 @@ public class Card {
         }
     }
 
+    /**
+     * Construit une nouvelle {@code Card} avec un rang et une couleur aléatoires.
+     * La valeur de la carte est déterminée en fonction de son rang.
+     */
     public Card() {
         Random random = new Random();
         this.rank = RANKS[random.nextInt(RANKS.length)];
@@ -34,6 +65,7 @@ public class Card {
         this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
         this.hiddenCardTexturePath = "Cards/hidden_white.png";
     }
+
 
     public Card(boolean hidden) {
         Random random = new Random();
@@ -58,16 +90,22 @@ public class Card {
         System.out.println("* " + card.getValue() + " de " + card.getSuit() + " *");
     }
 
+    /**
+     * Retourne le rang de la carte.
+     *
+     * @return le rang de la carte
+     */
     public String getRank() {
-        return this.rank;
+        return rank;
     }
 
-    public int getValue() {
-        return this.value;
-    }
-
+    /**
+     * Retourne la couleur de la carte.
+     *
+     * @return la couleur de la carte
+     */
     public String getSuit() {
-        return this.suit;
+        return suit;
     }
 
     public String getCardTexturePath() {
@@ -88,6 +126,5 @@ public class Card {
         } else {
             return false;
         }
-
     }
 }

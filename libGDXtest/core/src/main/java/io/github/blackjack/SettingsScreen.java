@@ -2,56 +2,45 @@ package io.github.blackjack;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
- * La classe {@code MenuScreen} représente l'écran principal du menu dans le jeu
- * de Blackjack.
+ * La classe {@code SettingsScreen} représente l'écran des paramètres dans le
+ * jeu de Blackjack.
  * Elle implémente l'interface {@link Screen} de libGDX, fournissant les
  * méthodes nécessaires
  * pour gérer l'affichage et les interactions utilisateur sur cet écran.
  * 
  * <p>
- * Cette classe est responsable de l'affichage des options du menu telles que
- * commencer la partie,
- * accéder aux options ou quitter le jeu, ainsi que de la gestion des
- * interactions utilisateur.
+ * Cette classe est responsable de l'affichage des options de réglage telles que
+ * le volume,
+ * et de la gestion des interactions utilisateur telles que le retour au menu
+ * principal.
  * </p>
  * 
  * @see Screen
  * @see Main
  * @see TextButton
+ * @see Slider
  */
-public class MenuScreen implements Screen {
+public class SettingsScreen implements Screen {
     /**
      * Référence à l'instance principale du jeu {@link Main}.
      */
     private Main main;
 
     /**
-     * Bouton permettant de démarrer une nouvelle partie.
-     */
-    private TextButton startButton;
-
-    /**
-     * Bouton permettant d'accéder aux options du jeu.
-     */
-    private TextButton optionsButton;
-
-    /**
-     * Bouton permettant de quitter le jeu.
-     */
-    private TextButton quitButton;
-
-    /**
-     * Texture de l'arrière-plan de l'écran principal du menu.
+     * Texture de l'arrière-plan de l'écran des paramètres.
      */
     private Texture backgroundTexture;
 
@@ -71,13 +60,23 @@ public class MenuScreen implements Screen {
     private Skin skin;
 
     /**
-     * Construit une nouvelle instance de {@code MenuScreen} avec les paramètres
+     * Slider permettant de régler le volume de la musique de fond.
+     */
+    private Slider volumeSlider;
+
+    /**
+     * Bouton permettant de revenir à l'écran principal du menu.
+     */
+    private TextButton backButton;
+
+    /**
+     * Construit une nouvelle instance de {@code SettingsScreen} avec les paramètres
      * spécifiés.
      *
      * @param main référence à l'instance principale du jeu {@link Main}
      * @param skin skin utilisé pour l'interface utilisateur
      */
-    public MenuScreen(Main main, Skin skin) {
+    public SettingsScreen(Main main, Skin skin) {
         this.main = main;
         this.skin = skin;
         this.stage = new Stage(new FitViewport(800, 480));
@@ -87,70 +86,47 @@ public class MenuScreen implements Screen {
 
     /**
      * Méthode appelée lorsque l'écran devient le rendu courant pour le jeu.
-     * Initialise les éléments graphiques du menu et les écouteurs d'événements.
+     * Initialise les éléments graphiques des paramètres et les écouteurs
+     * d'événements.
      */
     @Override
     public void show() {
         backgroundTexture = new Texture(Gdx.files.internal("Background2.png"));
 
-        startButton = new TextButton("Commencer la partie", skin);
-        optionsButton = new TextButton("Options", skin);
-        quitButton = new TextButton("Quitter", skin);
+        volumeSlider = new Slider(0, 1, 0.01f, false, skin);
+        volumeSlider.setValue(main.getBackgroundMusic().getVolume());
 
-        startButton.setSize(200, 50);
-        startButton.setPosition(300, 270);
+        volumeSlider.addListener(event -> {
+            main.getBackgroundMusic().setVolume(volumeSlider.getValue());
+            return false;
+        });
 
-        optionsButton.setSize(200, 50);
-        optionsButton.setPosition(300, 210);
+        Label volumeLabel = new Label("Volume", skin);
 
-        quitButton.setSize(200, 50);
-        quitButton.setPosition(300, 150);
+        backButton = new TextButton("Retour", skin);
 
-        stage.addActor(startButton);
-        stage.addActor(optionsButton);
-        stage.addActor(quitButton);
-
-        startButton.addListener(new ClickListener() {
+        backButton.addListener(new ClickListener() {
             /**
-             * Méthode appelée lors d'un clic sur le bouton de démarrage de la partie.
+             * Méthode appelée lors d'un clic sur le bouton de retour.
              *
              * @param event l'événement d'entrée
              * @param x     la coordonnée x du clic
              * @param y     la coordonnée y du clic
              */
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.showCasinoScreen();
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                main.setScreen(new MenuScreen(main, skin));
             }
         });
 
-        optionsButton.addListener(new ClickListener() {
-            /**
-             * Méthode appelée lors d'un clic sur le bouton des options.
-             *
-             * @param event l'événement d'entrée
-             * @param x     la coordonnée x du clic
-             * @param y     la coordonnée y du clic
-             */
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.SettingsScreen();
-            }
-        });
-
-        quitButton.addListener(new ClickListener() {
-            /**
-             * Méthode appelée lors d'un clic sur le bouton de sortie du jeu.
-             *
-             * @param event l'événement d'entrée
-             * @param x     la coordonnée x du clic
-             * @param y     la coordonnée y du clic
-             */
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
+        Table table = new Table();
+        table.setFillParent(true);
+        table.add(volumeLabel).padBottom(10);
+        table.row();
+        table.add(volumeSlider).width(400).padBottom(20);
+        table.row();
+        table.add(backButton).width(200).height(50);
+        stage.addActor(table);
     }
 
     /**
@@ -160,6 +136,8 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
@@ -212,32 +190,5 @@ public class MenuScreen implements Screen {
         skin.dispose();
         backgroundTexture.dispose();
         batch.dispose();
-    }
-
-    /**
-     * Retourne le bouton de démarrage.
-     *
-     * @return le bouton de démarrage
-     */
-    public TextButton getStartButton() {
-        return startButton;
-    }
-
-    /**
-     * Retourne le bouton des options.
-     *
-     * @return le bouton des options
-     */
-    public TextButton getOptionsButton() {
-        return optionsButton;
-    }
-
-    /**
-     * Retourne le bouton de quitter.
-     *
-     * @return le bouton de quitter
-     */
-    public TextButton getQuitButton() {
-        return quitButton;
     }
 }
