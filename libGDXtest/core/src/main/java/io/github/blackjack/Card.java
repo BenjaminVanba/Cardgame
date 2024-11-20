@@ -36,26 +36,15 @@ public class Card {
      * Indique si la carte est cachée (true) ou visible (false).
      */
     protected boolean hidden = true;
+    protected String CardTexturePath;
+    protected String hiddenCardTexturePath;
+    protected String shownCardTexturePath;
 
-    /**
-     * Tableau des couleurs disponibles pour les cartes.
-     */
-    private static final String[] SUITS = { "Cœurs", "Carreaux", "Trèfles", "Piques" };
+    protected static final String[] SUITS = { "Coeurs", "Carreaux", "Trefles", "Piques" };
+    protected static final String[] RANKS = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
+    protected static final int[] VALUES = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
 
-    /**
-     * Tableau des rangs disponibles pour les cartes.
-     */
-    private static final String[] RANKS = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
-
-    /**
-     * Tableau des valeurs correspondantes aux rangs des cartes.
-     */
-    private static final int[] VALUES = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
-
-    /**
-     * Carte de correspondance entre les rangs et leurs valeurs numériques.
-     */
-    private static final Map<String, Integer> rankValueMap = new HashMap<>();
+    protected static final Map<String, Integer> rankValueMap = new HashMap<>();
 
     // Initialisation statique pour remplir la map des valeurs
     static {
@@ -73,15 +62,32 @@ public class Card {
         this.rank = RANKS[random.nextInt(RANKS.length)];
         this.value = rankValueMap.get(this.rank);
         this.suit = SUITS[random.nextInt(SUITS.length)];
+        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
+        this.hiddenCardTexturePath = "Cards/hidden_white.png";
     }
 
-    /**
-     * Retourne la valeur numérique de la carte.
-     *
-     * @return la valeur de la carte
-     */
-    public int getValue() {
-        return value;
+
+    public Card(boolean hidden) {
+        Random random = new Random();
+        this.rank = RANKS[random.nextInt(RANKS.length)];
+        this.value = rankValueMap.get(this.rank);
+        this.suit = SUITS[random.nextInt(SUITS.length)];
+        this.hidden = hidden;
+        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
+        this.hiddenCardTexturePath = "Cards/hidden_white.png";
+    }
+
+    public Card(String rank, String suit, boolean hidden) {
+        this.value = rankValueMap.get(rank);
+        this.rank = rank;
+        this.suit = suit;
+        this.hidden = hidden;
+        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
+        this.hiddenCardTexturePath = "Cards/hidden_white.png";
+    }
+
+    public void DisplayInfo(Card card) {
+        System.out.println("* " + card.getValue() + " de " + card.getSuit() + " *");
     }
 
     /**
@@ -102,37 +108,23 @@ public class Card {
         return suit;
     }
 
-    /**
-     * Indique si la carte est cachée.
-     *
-     * @return {@code true} si la carte est cachée, {@code false} sinon
-     */
+    public String getCardTexturePath() {
+        return this.CardTexturePath;
+    }
+
+    public String gethiddenCardTexturePath() {
+        return this.hiddenCardTexturePath;
+    }
+
     public boolean isHidden() {
-        return hidden;
+        return this.hidden;
     }
 
-    /**
-     * Définit l'état de visibilité de la carte.
-     *
-     * @param hidden {@code true} pour cacher la carte, {@code false} pour la rendre
-     *               visible
-     */
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    /**
-     * Retourne une représentation textuelle de la carte.
-     * Si la carte est cachée, retourne "Carte cachée".
-     * Sinon, retourne une chaîne décrivant le rang et la couleur de la carte.
-     *
-     * @return une chaîne représentant la carte
-     */
-    @Override
-    public String toString() {
-        if (hidden) {
-            return "Carte cachée";
+    public boolean isAce() {
+        if (this.rank.equals("A")) {
+            return true;
+        } else {
+            return false;
         }
-        return rank + " de " + suit;
     }
 }

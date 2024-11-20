@@ -14,22 +14,11 @@ package io.github.blackjack;
  * @see Player
  */
 public class AIPlayer extends Player {
-
-    /**
-     * Construit un nouvel {@code AIPlayer} avec le nom par défaut "AIPlayer" et un
-     * score initial de 0.
-     */
-    public AIPlayer() {
-        super("AIPlayer", 0);
-    }
-
-    /**
-     * Construit un nouvel {@code AIPlayer} avec le nom spécifié et un score initial
-     * de 0.
-     *
-     * @param name le nom du joueur AI
-     */
     public AIPlayer(String name) {
         super(name, 0);
+        // Card card = new Card("Q", "Coeurs", false);
+        // Card card2 = new Card("K", "Piques", false);
+        // hand.addCard(card);
+        // hand.addCard(card2);
     }
 }

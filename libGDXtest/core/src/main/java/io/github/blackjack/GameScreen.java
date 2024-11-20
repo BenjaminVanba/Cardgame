@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -42,6 +42,10 @@ public class GameScreen implements Screen {
      */
     private Stage stage;
 
+    private TextButton backButton, betButton, hitButton, standButton;
+    private GameLogic gameLogic;
+    private Label resultLabel; // Pour afficher le message
+
     /**
      * Texture de la carte affichée à l'écran.
      */
@@ -76,17 +80,16 @@ public class GameScreen implements Screen {
      */
     public GameScreen(Main main, Skin skin) {
         this.main = main;
-        this.stage = new Stage(new FitViewport(800, 480));
+        this.stage = new Stage(new FitViewport(1960, 1080));
         Gdx.input.setInputProcessor(stage);
         this.batch = new SpriteBatch();
 
         backButton = new TextButton("Retour au menu", skin);
 
         backButton.setSize(150, 50);
-        backButton.setPosition(800 - backButton.getWidth() - 10, 480 - backButton.getHeight() - 10);
-
+        backButton.setPosition(1960 - backButton.getWidth() - 10, 1080 - backButton.getHeight() - 10);
         stage.addActor(backButton);
-
+  
         backButton.addListener(new ClickListener() {
             /**
              * Méthode appelée lors d'un clic sur le bouton de retour au menu.
@@ -100,25 +103,53 @@ public class GameScreen implements Screen {
                 main.setScreen(new MenuScreen(main, skin));
             }
         });
-    }
 
-    /**
-     * Méthode appelée lorsque l'écran devient le rendu courant pour le jeu.
-     * Initialise les éléments graphiques du jeu et les écouteurs d'événements.
-     */
-    @Override
-    public void show() {
-        backgroundTexture = new Texture(Gdx.files.internal("Background.jpg"));
-        cardTexture = new Texture(Gdx.files.internal("Cards/Clovers_2_white.png"));
-        cardImage = new Image(cardTexture);
 
-        float cardWidth = 100;
-        float cardHeight = 200;
-        cardImage.setSize(cardWidth, cardHeight);
+        betButton = new TextButton("Mise", skin);
+        betButton.setSize(150, 50);
+        betButton.setPosition(10, 10);
+        stage.addActor(betButton);
 
-        cardImage.setPosition((800 - cardWidth) / 2, (480 - cardHeight) / 2);
+        hitButton = new TextButton("Distribuer", skin);
+        hitButton.setSize(150, 50);
+        hitButton.setPosition(200, 10);
+        stage.addActor(hitButton);
 
-        stage.addActor(cardImage);
+        standButton = new TextButton("Rester", skin);
+        standButton.setSize(150, 50);
+        standButton.setPosition(400, 10);
+        stage.addActor(standButton);
+
+        gameLogic = new GameLogic(stage);
+        stage.addActor(gameLogic);
+
+        resultLabel = new Label("", skin);
+        resultLabel.setPosition(1960 / 2 - 100, 1080 / 2);
+        stage.addActor(resultLabel);
+
+        betButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameLogic.distributeInitialCards();
+                resultLabel.setText("");
+            }
+        });
+
+        hitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameLogic.playerHits();
+                resultLabel.setText(gameLogic.getResultMessage());
+            }
+        });
+
+        standButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameLogic.playerStands();
+                resultLabel.setText(gameLogic.getResultMessage());
+            }
+        });
     }
 
     /**
@@ -145,7 +176,21 @@ public class GameScreen implements Screen {
      * @param height la nouvelle hauteur de l'écran
      */
     @Override
+    public void show() {
+        // Charger l'arrière-plan si ce n'est pas déjà fait
+        if (backgroundTexture == null) {
+            backgroundTexture = new Texture(Gdx.files.internal("Background.jpg"));
+        }
+
+        // Vous pouvez initialiser ici d'autres ressources ou éléments spécifiques au
+        // moment
+        // où cet écran devient actif
+    }
+
+    @Override
     public void resize(int width, int height) {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'resize'");
         stage.getViewport().update(width, height, true);
     }
 
@@ -154,6 +199,8 @@ public class GameScreen implements Screen {
      */
     @Override
     public void pause() {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'pause'");
         // Implémentation de la méthode pause() si nécessaire
     }
 
@@ -162,6 +209,8 @@ public class GameScreen implements Screen {
      */
     @Override
     public void resume() {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'resume'");
         // Implémentation de la méthode resume() si nécessaire
     }
 
@@ -170,6 +219,8 @@ public class GameScreen implements Screen {
      */
     @Override
     public void hide() {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'hide'");
         // Implémentation de la méthode hide() si nécessaire
     }
 
@@ -178,9 +229,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void dispose() {
-        stage.dispose();
-        cardTexture.dispose();
-        backgroundTexture.dispose();
-        batch.dispose();
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'dispose'");
     }
 }

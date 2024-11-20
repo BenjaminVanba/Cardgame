@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Hand {
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+public class Hand extends Actor {
     protected ArrayList<Card> cards = new ArrayList<>();
 
     private List<Integer> scores = new ArrayList<>(Arrays.asList(0, 0)); // Liste modifiable pour stocker deux valeurs
@@ -45,7 +47,8 @@ public class Hand {
         return result.toString();
     }
 
-    public void addCard(Card card) {
+    public void addCard(Card card, boolean isHidden) {
+        card.hidden = isHidden;
         this.cards.add(card);
 
         // Si la carte ajoutée est un As
@@ -81,4 +84,5 @@ public class Hand {
     public int getMaxValue() {
         return scores.stream().max(Integer::compareTo).orElse(0);
     }
+
 }
