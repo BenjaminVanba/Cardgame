@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
      */
     private Stage stage;
 
-    private TextButton backButton, betButton, hitButton, standButton;
+    private TextButton backButton, betButton, hitButton, standButton, restartButton;
     private GameLogic gameLogic;
     private Label resultLabel; // Pour afficher le message
 
@@ -119,6 +119,12 @@ public class GameScreen implements Screen {
         standButton.setPosition(400, 10);
         stage.addActor(standButton);
 
+        restartButton = new TextButton("Relancer", skin);
+        restartButton.setSize(150, 50);
+        restartButton.setPosition(10, 70); // Position différente des autres
+        restartButton.setVisible(false); // Caché par défaut
+        stage.addActor(restartButton);
+
         gameLogic = new GameLogic(stage);
         stage.addActor(gameLogic);
 
@@ -131,6 +137,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.distributeInitialCards();
                 resultLabel.setText("");
+                restartButton.setVisible(false);
             }
         });
 
@@ -139,6 +146,9 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.playerHits();
                 resultLabel.setText(gameLogic.getResultMessage());
+                if (!gameLogic.getResultMessage().isEmpty()) {
+                    restartButton.setVisible(true); // Affiche le bouton si la partie est terminée
+                }
             }
         });
 
@@ -147,6 +157,22 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.playerStands();
                 resultLabel.setText(gameLogic.getResultMessage());
+                restartButton.setVisible(true); // Affiche le bouton lorsque la partie est terminée
+            }
+        });
+
+        restartButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Réinitialise la logique du jeu
+                gameLogic.resetGame();
+
+                // Réinitialise l'affichage
+                resultLabel.setText(""); // Vide le message du résultat
+                restartButton.setVisible(false); // Cache le bouton "Relancer"
+
+                // Force une mise à jour des acteurs existants
+                gameLogic.distributeInitialCards(); // Relance la distribution initiale
             }
         });
     }

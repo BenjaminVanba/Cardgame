@@ -57,20 +57,30 @@ public class GameLogic extends Actor {
     public void playerHits() {
         drawFromDeck(player, false);
         if (player.hand.isBurnt()) {
-            resultMessage = "Vous êtes brûlé !";
+            resultMessage = "Vous êtes brûlé ! à " + player.hand.getMaxValue() + "/" + player.hand.getMinValue();
         }
     }
 
     public void playerStands() {
-        dealer.hand.unhideCard();
+        dealer.hand.unhideCard(); // Montre les cartes cachées du croupier
+
         while (true) {
             int playerScore = getValidScore(player.hand);
             int dealerScore = getValidScore(dealer.hand);
 
-            if (dealerScore >= 17 || dealerScore > playerScore || dealer.hand.isBurnt())
+            // Vérifie si le croupier doit s'arrêter ou continue de tirer
+            if (dealerScore >= 17 || dealerScore > playerScore || dealer.hand.isBurnt()) {
                 break;
+            }
+
+            // Le croupier tire une carte
             drawFromDeck(dealer, false);
+
+            // Afficher la nouvelle carte du croupier
+            stage.act(); // Met à jour les acteurs du stage pour refléter les changements
         }
+
+        // Détermine le gagnant
         determineWinner();
     }
 
@@ -97,5 +107,12 @@ public class GameLogic extends Actor {
 
     public String getResultMessage() {
         return resultMessage;
+    }
+
+    public void resetGame() {
+        // deck = new Deck(); // Réinitialise le deck
+        player.hand.resetHand(); // Vide la main du joueur
+        dealer.hand.resetHand(); // Vide la main du croupier
+        resultMessage = ""; // Réinitialise le message
     }
 }
