@@ -20,24 +20,24 @@ public abstract class Player extends Actor {
     private static final Map<String, Texture> textureCache = new HashMap<>();
 
     public Player(String name, double moneyAmount) {
-        this.playerId = ++lastPlayerId;
-        this.hand = new Hand();
+        this.playerId = ++lastPlayerId; // Attribution d'un ID unique à chaque joueur
+        this.hand = new Hand(); // Initialisation de la main
         this.moneyAmount = moneyAmount;
         this.name = name;
 
         // Taille des cartes ajustée pour l'affichage
-        setWidth(100); // Largeur réduite pour s'adapter à l'écran
-        setHeight(100 * 930 / 655); // Hauteur proportionnelle à la largeur
+        setWidth(200); // Largeur des cartes
+        setHeight(200 * 930 / 655); // Hauteur proportionnelle à la largeur
 
         // Positionner le joueur en fonction de son ID
-        if (this.playerId == 2) { // S'agit du dealer, mettre sa main en haut
-            setX((1920 / 2) - (getWidth() * 3)); // Centré
-            setY(1080 - 250);
+        if (this.playerId == 2) { // S'agit du dealer, positionner sa main en haut au milieu
+            setX((1920 - (getWidth() * 3)) / 2); // Centré horizontalement
+            setY(1080 - 300); // Près du haut de l'écran
         }
 
-        if (this.playerId == 1) { // S'agit du joueur humain, mettre sa main en bas
-            setX((1920 / 2) - (getWidth() * 3)); // Centré
-            setY(50);
+        if (this.playerId == 1) { // S'agit du joueur humain, positionner sa main en bas au milieu
+            setX((1920 - (getWidth() * 3)) / 2); // Centré horizontalement
+            setY(50); // Près du bas de l'écran
         }
     }
 
