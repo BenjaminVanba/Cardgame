@@ -62,8 +62,8 @@ public class Card {
         this.rank = RANKS[random.nextInt(RANKS.length)];
         this.value = rankValueMap.get(this.rank);
         this.suit = SUITS[random.nextInt(SUITS.length)];
-        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
-        this.hiddenCardTexturePath = "Cards/hidden_white.png";
+        this.CardTexturePath = "Cards/" + this.rank + "_of_" + this.suit + ".png";
+        this.hiddenCardTexturePath = "Cards/cardback.png";
     }
 
     public Card(boolean hidden) {
@@ -72,8 +72,8 @@ public class Card {
         this.value = rankValueMap.get(this.rank);
         this.suit = SUITS[random.nextInt(SUITS.length)];
         this.hidden = hidden;
-        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
-        this.hiddenCardTexturePath = "Cards/hidden_white.png";
+        this.CardTexturePath = "Cards/" + this.rank + "_of_" + this.suit + ".png";
+        this.hiddenCardTexturePath = "Cards/cardback.png";
     }
 
     public Card(String rank, String suit, boolean hidden) {
@@ -81,8 +81,8 @@ public class Card {
         this.rank = rank;
         this.suit = suit;
         this.hidden = hidden;
-        this.CardTexturePath = "Cards/" + this.suit + "_" + this.rank + "_white.png";
-        this.hiddenCardTexturePath = "Cards/hidden_white.png";
+        this.CardTexturePath = "Cards/" + this.rank + "_of_" + this.suit + ".png";
+        this.hiddenCardTexturePath = "Cards/cardback.png";
     }
 
     public void DisplayInfo(Card card) {
