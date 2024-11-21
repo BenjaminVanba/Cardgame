@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
     /**
      * Image représentant la carte affichée à l'écran.
      */
-    private Image cardImage;
+    // private Image cardImage;
 
     /**
      * Texture de l'arrière-plan de l'écran de jeu.
@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
     /**
      * Bouton permettant de revenir au menu principal.
      */
-    private TextButton backButton;
+    // private TextButton backButton;
 
     /**
      * Construit une nouvelle instance de {@code GameScreen} avec les paramètres
@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
         backButton.setSize(150, 50);
         backButton.setPosition(1960 - backButton.getWidth() - 10, 1080 - backButton.getHeight() - 10);
         stage.addActor(backButton);
-  
+
         backButton.addListener(new ClickListener() {
             /**
              * Méthode appelée lors d'un clic sur le bouton de retour au menu.
@@ -103,7 +103,6 @@ public class GameScreen implements Screen {
                 main.setScreen(new MenuScreen(main, skin));
             }
         });
-
 
         betButton = new TextButton("Mise", skin);
         betButton.setSize(150, 50);
