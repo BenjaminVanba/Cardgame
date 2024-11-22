@@ -17,7 +17,7 @@ public class Deck {
 
         for (String suit : suits) {
             for (String rank : ranks) {
-                this.cards.add(new Card(rank, suit, false)); // `false` signifie que la carte n'est pas cachée
+                this.cards.add(new Card(rank, suit, true)); // `false` signifie que la carte n'est pas cachée
             }
         }
 

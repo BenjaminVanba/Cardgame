@@ -150,9 +150,15 @@ public class GameScreen implements Screen {
         betButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameLogic.distributeInitialCards();
-                resultLabel.setText("");
-                restartButton.setVisible(false);
+                if (gameLogic.isGameFinished()) { // Vérifie si la partie est terminée
+                    resultLabel.setText(""); // Réinitialise l'affichage des résultats
+                    restartButton.setVisible(false); // Cache le bouton "Relancer"
+                }
+
+                // Distribue les cartes uniquement si le jeu attend une mise
+                if (gameLogic.isWaitingForBet()) {
+                    gameLogic.distributeInitialCards();
+                }
             }
         });
 
@@ -185,9 +191,6 @@ public class GameScreen implements Screen {
                 // Réinitialise l'affichage
                 resultLabel.setText(""); // Vide le message du résultat
                 restartButton.setVisible(false); // Cache le bouton "Relancer"
-
-                // Force une mise à jour des acteurs existants
-                gameLogic.distributeInitialCards(); // Relance la distribution initiale
             }
         });
 
@@ -211,7 +214,12 @@ public class GameScreen implements Screen {
             if (nextCardTexture != null) {
                 nextCardTexture.dispose(); // Libérer la précédente texture
             }
-            nextCardTexture = new Texture(Gdx.files.internal(nextCard.getCardTexturePath())); // Charger la texture
+            if (nextCard.hidden) {
+                nextCardTexture = new Texture(Gdx.files.internal(nextCard.gethiddenCardTexturePath())); // Charger la
+                                                                                                        // texture
+            } else {
+                nextCardTexture = new Texture(Gdx.files.internal(nextCard.getCardTexturePath())); // Charger la texture
+            }
         }
 
         batch.begin();
