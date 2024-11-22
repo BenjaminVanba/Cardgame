@@ -14,13 +14,17 @@ public class GameLogic extends Actor {
     private boolean gameFinished = true; // Indique si la partie est terminée
     private boolean waitingForBet = true;
 
-    public GameLogic(Stage stage) {
+    public GameLogic(Stage stage, Dealer dealer, HumanPlayer player) {
         this.stage = stage;
-        this.deck = new Deck();
-        this.player = new HumanPlayer("Toto", 1000);
-        this.dealer = new Dealer("FrankLeCroupier");
-        this.stage.addActor(player);
-        this.stage.addActor(dealer);
+        this.dealer = dealer;
+        this.player = player;
+
+        // Ajoutez les joueurs existants au stage
+        stage.addActor(this.dealer);
+        stage.addActor(this.player);
+
+        this.deck = new Deck(); // Initialisation du deck
+        resetGame(); // Réinitialise l'état du jeu
     }
 
     public int getPlayerScore() {
@@ -157,7 +161,9 @@ public class GameLogic extends Actor {
     public void resetGame() {
         player.hand.resetHand(); // Vide la main du joueur
         dealer.hand.resetHand(); // Vide la main du croupier
-        // deck = new Deck(); // Réinitialise le deck
+        player.setPositionBasedOnType(false); // Réinitialise la position et la main du joueur
+        dealer.setPositionBasedOnType(true); // Réinitialise la position et la main du croupier
+        // deck = new Deck(); // Recharge le deck
         resultMessage = ""; // Réinitialise le message de résultat
         gameFinished = false; // Le jeu n'est plus terminé
         waitingForBet = true; // Attend que le joueur clique sur "Miser"

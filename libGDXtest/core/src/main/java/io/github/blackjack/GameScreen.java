@@ -84,6 +84,10 @@ public class GameScreen implements Screen {
      * @param main référence à l'instance principale du jeu {@link Main}
      * @param skin skin utilisé pour l'interface utilisateur
      */
+
+    private Dealer dealer;
+    private HumanPlayer player;
+
     public GameScreen(Main main, Skin skin, String casinoType) {
         this.main = main;
         this.skin = skin;
@@ -91,11 +95,28 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         this.batch = new SpriteBatch();
         this.casinoType = casinoType;
+        // Initialisez les joueurs une seule fois
+        if (dealer == null && player == null) {
+            dealer = new Dealer("Croupier");
+            player = new HumanPlayer("Joueur", 1000);
+        }
+
+        // Instanciez GameLogic avec les joueurs existants
+        gameLogic = new GameLogic(stage, dealer, player);
+
+        // Réinitialiser les positions et mains des joueurs
+        // gameLogic.player.resetPositionAndHand();
+        System.out.println(gameLogic.player.playerId);
+        player.setPositionBasedOnType(false);
+        // gameLogic.dealer.resetPositionAndHand();
+        System.out.println(gameLogic.dealer.playerId);
+        dealer.setPositionBasedOnType(true);
+        // resetPositionOfPlayer(gameLogic.dealer);
+
     }
 
     @Override
     public void show() {
-        gameLogic = new GameLogic(stage);
         stage.addActor(gameLogic);
 
         // Charger l'arrière-plan si ce n'est pas déjà fait
