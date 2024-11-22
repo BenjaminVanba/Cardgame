@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
@@ -161,12 +162,20 @@ public class GameScreen implements Screen {
                 // Distribue les cartes uniquement si le jeu attend une mise
                 if (gameLogic.isWaitingForBet()) {
                     gameLogic.distributeInitialCards();
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            updateScores();
+                        }
+                    }, 1.6f); // Attendre la fin de la distribution des cartes
+
                 }
 
             }
         });
 
         hitButton.addListener(new ClickListener() {
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.playerHits();
@@ -193,7 +202,12 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 // Réinitialise la logique du jeu
                 gameLogic.resetGame();
-                updateScores();
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        updateScores();
+                    }
+                }, 1.6f);
 
                 // Réinitialise l'affichage
                 resultLabel.setText(""); // Vide le message du résultat
