@@ -9,14 +9,14 @@ public class GameLogic extends Actor {
     Stage stage;
     Deck deck;
     HumanPlayer player;
-    AIPlayer dealer;
+    Dealer dealer;
     private String resultMessage = ""; // Message pour afficher le gagnant
 
     public GameLogic(Stage stage) {
         this.stage = stage;
         this.deck = new Deck();
         this.player = new HumanPlayer("Toto", 1000);
-        this.dealer = new AIPlayer("FrankLeCroupier");
+        this.dealer = new Dealer("FrankLeCroupier");
         this.stage.addActor(player);
         this.stage.addActor(dealer);
     }
@@ -97,7 +97,11 @@ public class GameLogic extends Actor {
         int dealerScore = getValidScore(dealer.hand);
 
         if (dealer.hand.isBurnt() || playerScore > dealerScore) {
-            resultMessage = "Vous avez gagné !";
+            if (dealer.hand.isBurnt()) {
+                resultMessage = "Vous avez gagné ! Le croupier s'est brûlé !";
+            } else {
+                resultMessage = "Vous avez gagné !";
+            }
         } else if (playerScore == dealerScore) {
             resultMessage = "Égalité !";
         } else {
