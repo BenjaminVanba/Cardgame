@@ -9,14 +9,14 @@ public class GameLogic extends Actor {
     Stage stage;
     Deck deck;
     HumanPlayer player;
-    AIPlayer dealer;
+    Dealer dealer;
     private String resultMessage = ""; // Message pour afficher le gagnant
 
     public GameLogic(Stage stage) {
         this.stage = stage;
         this.deck = new Deck();
         this.player = new HumanPlayer("Toto", 1000);
-        this.dealer = new AIPlayer("FrankLeCroupier");
+        this.dealer = new Dealer("FrankLeCroupier");
         this.stage.addActor(player);
         this.stage.addActor(dealer);
     }
@@ -57,20 +57,30 @@ public class GameLogic extends Actor {
     public void playerHits() {
         drawFromDeck(player, false);
         if (player.hand.isBurnt()) {
-            resultMessage = "Vous êtes brûlé !";
+            resultMessage = "Vous êtes brûlé ! à " + player.hand.getMaxValue() + "/" + player.hand.getMinValue();
         }
     }
 
     public void playerStands() {
-        dealer.hand.unhideCard();
+        dealer.hand.unhideCard(); // Montre les cartes cachées du croupier
+
         while (true) {
             int playerScore = getValidScore(player.hand);
             int dealerScore = getValidScore(dealer.hand);
 
-            if (dealerScore >= 17 || dealerScore > playerScore || dealer.hand.isBurnt())
+            // Vérifie si le croupier doit s'arrêter ou continue de tirer
+            if (dealerScore >= 17 || dealerScore > playerScore || dealer.hand.isBurnt()) {
                 break;
+            }
+
+            // Le croupier tire une carte
             drawFromDeck(dealer, false);
+
+            // Afficher la nouvelle carte du croupier
+            stage.act(); // Met à jour les acteurs du stage pour refléter les changements
         }
+
+        // Détermine le gagnant
         determineWinner();
     }
 
@@ -87,7 +97,11 @@ public class GameLogic extends Actor {
         int dealerScore = getValidScore(dealer.hand);
 
         if (dealer.hand.isBurnt() || playerScore > dealerScore) {
-            resultMessage = "Vous avez gagné !";
+            if (dealer.hand.isBurnt()) {
+                resultMessage = "Vous avez gagné ! Le croupier s'est brûlé !";
+            } else {
+                resultMessage = "Vous avez gagné !";
+            }
         } else if (playerScore == dealerScore) {
             resultMessage = "Égalité !";
         } else {
@@ -97,5 +111,12 @@ public class GameLogic extends Actor {
 
     public String getResultMessage() {
         return resultMessage;
+    }
+
+    public void resetGame() {
+        // deck = new Deck(); // Réinitialise le deck
+        player.hand.resetHand(); // Vide la main du joueur
+        dealer.hand.resetHand(); // Vide la main du croupier
+        resultMessage = ""; // Réinitialise le message
     }
 }

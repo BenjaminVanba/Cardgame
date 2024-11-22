@@ -7,10 +7,15 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Hand extends Actor {
-    protected ArrayList<Card> cards = new ArrayList<>();
+    protected ArrayList<Card> cards;
 
-    private List<Integer> scores = new ArrayList<>(Arrays.asList(0, 0)); // Liste modifiable pour stocker deux valeurs
-                                                                         // de score
+    private List<Integer> scores;
+
+    public Hand() {
+        scores = new ArrayList<>(Arrays.asList(0, 0)); // Liste modifiable pour stocker deux valeurs
+                                                       // de score
+        cards = new ArrayList<>();
+    }
 
     public void DisplayInfo() {
         // TODO Auto-generated method stub
@@ -72,6 +77,7 @@ public class Hand extends Actor {
     }
 
     public boolean isBurnt() {
+        System.out.println(this.getMinValue() + "/" + this.getMaxValue());
         return scores.get(0) > 21 && scores.get(1) > 21 && this.isBlackJack() == false;
     }
 
@@ -85,4 +91,11 @@ public class Hand extends Actor {
         return scores.stream().max(Integer::compareTo).orElse(0);
     }
 
+    public void resetHand() {
+        System.out.println("avant reset, " + this.getScores());
+        this.scores = new ArrayList<>(Arrays.asList(0, 0)); // Liste modifiable pour stocker deux valeurs
+        // de score
+        this.cards = new ArrayList<>();
+        System.out.println("avant reset, " + this.getScores());
+    }
 }
