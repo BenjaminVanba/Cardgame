@@ -45,6 +45,7 @@ public class GameScreen implements Screen {
     private TextButton backButton, betButton, hitButton, standButton, restartButton;
     private GameLogic gameLogic;
     private Label resultLabel; // Pour afficher le message
+    private Texture nextCardTexture;
 
     /**
      * Texture de la carte affichée à l'écran.
@@ -186,8 +187,27 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Mettre à jour la texture de la prochaine carte
+        if (gameLogic.deck.getRemainingCards() > 0) {
+            Card nextCard = gameLogic.deck.peekNextCard(); // Obtenir la prochaine carte
+            if (nextCardTexture != null) {
+                nextCardTexture.dispose(); // Libérer la précédente texture
+            }
+            nextCardTexture = new Texture(Gdx.files.internal(nextCard.getCardTexturePath())); // Charger la texture
+        }
+
         batch.begin();
+        // Dessiner l'arrière-plan
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        // Afficher la prochaine carte visible au milieu de l'écran légèrement à droite
+        if (nextCardTexture != null) {
+            float cardWidth = 200; // Largeur de la carte
+            float cardHeight = 300; // Hauteur de la carte
+            float cardX = (Gdx.graphics.getWidth() - 300); // Centre de l'écran + décalage à droite
+            float cardY = (Gdx.graphics.getHeight() / 2) - (cardHeight / 2); // Centré verticalement
+            batch.draw(nextCardTexture, cardX, cardY, cardWidth, cardHeight);
+        }
         batch.end();
 
         stage.act(delta);

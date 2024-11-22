@@ -47,6 +47,15 @@ public class Deck {
         }
     }
 
+    // Retourne la prochaine carte sans la retirer
+    public Card peekNextCard() {
+        if (!cards.isEmpty()) {
+            return cards.get(0); // Retourne la première carte du deck
+        } else {
+            throw new IllegalStateException("Le deck est vide !");
+        }
+    }
+
     public int getRemainingCards() {
         return this.cards.size();
     }
