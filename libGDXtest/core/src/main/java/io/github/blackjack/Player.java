@@ -79,4 +79,16 @@ public abstract class Player extends Actor {
     public String getName() {
         return this.name;
     }
+
+    public void resetPositionAndHand() {
+        this.hand.clear(); // Vide la main
+        if (this.playerId == 2) { // Position du croupier
+            setX((1920 - (getWidth() * 3)) / 2);
+            setY(1080 - 300);
+        } else if (this.playerId == 1) { // Position du joueur
+            setX((1920 - (getWidth() * 3)) / 2);
+            setY(50);
+        }
+    }
+
 }

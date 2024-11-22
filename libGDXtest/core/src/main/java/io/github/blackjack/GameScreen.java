@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
@@ -94,6 +95,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        gameLogic = new GameLogic(stage);
+        stage.addActor(gameLogic);
+
         // Charger l'arrière-plan si ce n'est pas déjà fait
         if (casinoType.equals("casino1")) {
             backgroundTexture = new Texture(Gdx.files.internal("CasinoSuper.png"));
@@ -142,25 +146,28 @@ public class GameScreen implements Screen {
         restartButton.setVisible(false); // Caché par défaut
         stage.addActor(restartButton);
 
-        gameLogic = new GameLogic(stage);
-        stage.addActor(gameLogic);
-
         resultLabel = new Label("", skin);
         resultLabel.setPosition(1960 / 2 - 100, 1080 / 2);
         stage.addActor(resultLabel);
 
+        gameLogic.resetGame();
+        updateButtonVisibility(); // Met à jour l'affichage des boutons
+
         betButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
                 if (gameLogic.isGameFinished()) { // Vérifie si la partie est terminée
                     resultLabel.setText(""); // Réinitialise l'affichage des résultats
-                    restartButton.setVisible(false); // Cache le bouton "Relancer"
                 }
-
-                // Distribue les cartes uniquement si le jeu attend une mise
                 if (gameLogic.isWaitingForBet()) {
-                    gameLogic.distributeInitialCards();
+                    gameLogic.distributeInitialCards(); // Distribue les cartes
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            updateScores();
+                        }
+                    }, 1.6f);
+                    updateButtonVisibility(); // Met à jour l'affichage des boutons
                 }
 
             }
@@ -172,32 +179,35 @@ public class GameScreen implements Screen {
                 gameLogic.playerHits();
                 updateScores();
                 resultLabel.setText(gameLogic.getResultMessage());
-                if (!gameLogic.getResultMessage().isEmpty()) {
-                    restartButton.setVisible(true); // Affiche le bouton si la partie est terminée
-                }
+                updateButtonVisibility(); // Met à jour l'affichage des boutons
             }
         });
 
         standButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                gameLogic.setGameFinished(true);
+                gameLogic.setWaitingForBet(false);
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        updateScores();
+                    }
+                }, 0.2f);
                 gameLogic.playerStands();
-                updateScores();
                 resultLabel.setText(gameLogic.getResultMessage());
-                restartButton.setVisible(true); // Affiche le bouton lorsque la partie est terminée
+                updateButtonVisibility(); // Met à jour l'affichage des boutons
             }
         });
 
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Réinitialise la logique du jeu
-                gameLogic.resetGame();
-                updateScores();
+                gameLogic.resetGame(); // Réinitialise la logique du jeu
 
-                // Réinitialise l'affichage
-                resultLabel.setText(""); // Vide le message du résultat
-                restartButton.setVisible(false); // Cache le bouton "Relancer"
+                updateScores();
+                resultLabel.setText(""); // Efface le résultat précédent
+                updateButtonVisibility(); // Met à jour l'affichage des boutons
             }
         });
 
@@ -311,5 +321,35 @@ public class GameScreen implements Screen {
     public void dispose() {
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'dispose'");
+    }
+
+    public void updateButtonVisibility() {
+        // Vérifie les états dans GameLogic pour déterminer quels boutons afficher
+        boolean gameFinished = gameLogic.isGameFinished();
+        boolean waitingForBet = gameLogic.isWaitingForBet();
+
+        System.out.println("Mise a jour des boutnon: ");
+        System.out.println("waitingForBet:  " + waitingForBet);
+        System.out.println("gameFinished:  " + gameFinished);
+
+        // Début de partie, afficher uniquement "Miser"
+        if (gameFinished) {
+            betButton.setVisible(false);
+            hitButton.setVisible(false);
+            standButton.setVisible(false);
+            restartButton.setVisible(true);
+        }
+
+        else if (waitingForBet) {
+            betButton.setVisible(true);
+            hitButton.setVisible(false);
+            standButton.setVisible(false);
+            restartButton.setVisible(false);
+        } else if (!gameFinished) {
+            betButton.setVisible(false);
+            hitButton.setVisible(true);
+            standButton.setVisible(true);
+            restartButton.setVisible(false);
+        }
     }
 }

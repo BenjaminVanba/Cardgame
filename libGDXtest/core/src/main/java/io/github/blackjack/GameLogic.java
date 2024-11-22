@@ -31,7 +31,18 @@ public class GameLogic extends Actor {
         return dealer.hand.getVisibleScore();
     }
 
+    public void setGameFinished(boolean gameFinished) {
+        this.gameFinished = gameFinished;
+    }
+
+    public void setWaitingForBet(boolean waitingForBet) {
+        this.waitingForBet = waitingForBet;
+    }
+
     public void distributeInitialCards() {
+        if (!waitingForBet)
+            return; // Ne redistribue pas si le jeu n'attend pas une mise
+
         player.hand.clear();
         dealer.hand.clear();
 
@@ -63,14 +74,17 @@ public class GameLogic extends Actor {
             }
         }, 1.5f);
 
-        // Met fin à l'attente après la distribution
-        waitingForBet = false;
+        waitingForBet = false; // Le jeu commence
     }
 
     public void playerHits() {
         drawFromDeck(player, false);
+
+        // Si le joueur se brûle, le jeu est terminé
         if (player.hand.isBurnt()) {
-            resultMessage = "Vous êtes brûlé ! à " + player.hand.getMaxValue() + "/" + player.hand.getMinValue();
+            resultMessage = "Vous êtes brûlé !";
+            gameFinished = true;
+            waitingForBet = true;
         }
     }
 
@@ -111,16 +125,20 @@ public class GameLogic extends Actor {
             if (dealer.hand.isBurnt()) {
                 resultMessage = "Vous avez gagné ! Le croupier s'est brûlé !";
                 this.gameFinished = true;
+                this.waitingForBet = true;
             } else {
                 resultMessage = "Vous avez gagné !";
                 this.gameFinished = true;
+                this.waitingForBet = true;
             }
         } else if (playerScore == dealerScore) {
             resultMessage = "Égalité !";
             this.gameFinished = true;
+            this.waitingForBet = true;
         } else {
             resultMessage = "Le croupier a gagné !";
             this.gameFinished = true;
+            this.waitingForBet = true;
         }
     }
 
@@ -139,8 +157,9 @@ public class GameLogic extends Actor {
     public void resetGame() {
         player.hand.resetHand(); // Vide la main du joueur
         dealer.hand.resetHand(); // Vide la main du croupier
-        resultMessage = ""; // Réinitialise le message
-        gameFinished = false;
-        waitingForBet = true; // Attend une mise pour redistribuer les cartes
+        // deck = new Deck(); // Réinitialise le deck
+        resultMessage = ""; // Réinitialise le message de résultat
+        gameFinished = false; // Le jeu n'est plus terminé
+        waitingForBet = true; // Attend que le joueur clique sur "Miser"
     }
 }
