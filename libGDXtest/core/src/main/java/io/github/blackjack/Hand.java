@@ -136,10 +136,7 @@ public class Hand extends Actor {
     }
 
     public void resetHand() {
-        System.out.println("avant reset, " + this.getScores());
-        this.scores = new ArrayList<>(Arrays.asList(0, 0)); // Liste modifiable pour stocker deux valeurs
-        // de score
-        this.cards = new ArrayList<>();
-        System.out.println("avant reset, " + this.getScores());
+        this.scores = new ArrayList<>(Arrays.asList(0, 0)); // Réinitialise les scores
+        this.cards.clear(); // Vide les cartes
     }
 }

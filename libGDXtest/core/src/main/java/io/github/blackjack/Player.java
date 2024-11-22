@@ -79,4 +79,15 @@ public abstract class Player extends Actor {
     public String getName() {
         return this.name;
     }
+
+    public void setPositionBasedOnType(boolean isDealer) {
+        if (isDealer) {
+            setX((1920 - (getWidth() * 3)) / 2); // Centré horizontalement
+            setY(1080 - 300); // En haut
+        } else {
+            setX((1920 - (getWidth() * 3)) / 2); // Centré horizontalement
+            setY(50); // En bas
+        }
+    }
+
 }
