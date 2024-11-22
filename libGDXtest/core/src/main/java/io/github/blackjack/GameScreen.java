@@ -181,20 +181,25 @@ public class GameScreen implements Screen {
                     resultLabel.setText(""); // Réinitialise l'affichage des résultats
                 }
                 if (gameLogic.isWaitingForBet()) {
+
                     gameLogic.distributeInitialCards(); // Distribue les cartes
+
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
                             updateScores();
                         }
+
                     }, 1.6f);
                     updateButtonVisibility(); // Met à jour l'affichage des boutons
+
                 }
 
             }
         });
 
         hitButton.addListener(new ClickListener() {
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.playerHits();
@@ -224,7 +229,9 @@ public class GameScreen implements Screen {
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 gameLogic.resetGame(); // Réinitialise la logique du jeu
+
 
                 updateScores();
                 resultLabel.setText(""); // Efface le résultat précédent
