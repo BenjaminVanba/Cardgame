@@ -23,6 +23,14 @@ public class GameLogic extends Actor {
         this.stage.addActor(dealer);
     }
 
+    public int getPlayerScore() {
+        return player.hand.getScore();
+    }
+
+    public int getDealerScore() {
+        return dealer.hand.getVisibleScore();
+    }
+
     public void distributeInitialCards() {
         player.hand.clear();
         dealer.hand.clear();
@@ -70,8 +78,8 @@ public class GameLogic extends Actor {
         dealer.hand.unhideCard(); // Montre les cartes cachées du croupier
 
         while (true) {
-            int playerScore = getValidScore(player.hand);
-            int dealerScore = getValidScore(dealer.hand);
+            int playerScore = player.hand.getScore();
+            int dealerScore = dealer.hand.getScore();
 
             // Vérifie si le croupier doit s'arrêter ou continue de tirer
             if (dealerScore >= 17 || dealerScore > playerScore || dealer.hand.isBurnt()) {
@@ -80,9 +88,6 @@ public class GameLogic extends Actor {
 
             // Le croupier tire une carte
             drawFromDeck(dealer, false);
-
-            // Afficher la nouvelle carte du croupier
-            stage.act(); // Met à jour les acteurs du stage pour refléter les changements
         }
 
         // Détermine le gagnant

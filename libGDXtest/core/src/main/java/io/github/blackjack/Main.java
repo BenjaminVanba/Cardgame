@@ -37,8 +37,8 @@ public class Main extends Game {
     /**
      * Affiche l'écran du jeu.
      */
-    public void showGameScreen() {
-        setScreen(new GameScreen(this, this.skin));
+    public void showGameScreen(String casinoType) {
+        setScreen(new GameScreen(this, this.skin, casinoType));
     }
 
     /**

@@ -8,13 +8,57 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Hand extends Actor {
     protected ArrayList<Card> cards;
-
     private List<Integer> scores;
 
     public Hand() {
         scores = new ArrayList<>(Arrays.asList(0, 0)); // Liste modifiable pour stocker deux valeurs
                                                        // de score
         cards = new ArrayList<>();
+    }
+
+    public int getVisibleScore() {
+        int score = 0;
+        int aceCount = 0;
+
+        for (Card card : cards) {
+            if (!card.hidden) { // N'inclure que les cartes visibles
+                int cardValue = card.getValue();
+                score += cardValue;
+
+                if (card.isAce()) {
+                    aceCount++;
+                }
+            }
+        }
+
+        // Ajustement de la valeur des As si le score dépasse 21
+        while (score > 21 && aceCount > 0) {
+            score -= 10; // Compte l'As comme 1 au lieu de 11
+            aceCount--;
+        }
+
+        return score;
+    }
+
+    public int getScore() {
+        int score = 0;
+        int aceCount = 0;
+
+        for (Card card : cards) {
+            int cardValue = card.getValue();
+            score += cardValue;
+
+            if (card.isAce()) {
+                aceCount++;
+            }
+        }
+
+        while (score > 21 && aceCount > 0) {
+            score -= 10;
+            aceCount--;
+        }
+
+        return score;
     }
 
     public void DisplayInfo() {

@@ -13,7 +13,7 @@ dependencies {
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-    if (enableGraalNative == 'true') {
+    if(enableGraalNative == 'true') {
         implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
     }
 }
@@ -23,8 +23,8 @@ task generateJavadoc(type: Javadoc) {
     // Définir les sources à documenter
     source = sourceSets.main.allJava
 
-    // Inclure les dépendances dans le classpath en utilisant 'compileClasspath'
-    classpath = sourceSets.main.compileClasspath
+    // Inclure les dépendances dans le classpath
+    classpath += configurations.api + configurations.implementation
 
     // Options de configuration de Javadoc
     options.memberLevel = JavadocMemberLevel.PUBLIC
@@ -36,12 +36,9 @@ task generateJavadoc(type: Javadoc) {
 
     // Optionnel : ne pas échouer en cas d'erreurs mineures
     failOnError false
-
-    // Optionnel : Afficher les avertissements de Javadoc
-    options.addBooleanOption('Xdoclint:none', true)
 }
 
-// Optionnel : Ajouter une tâche pour nettoyer les documents Javadoc générés
+// Optionnel : Ajouter une tâche pour nettoyer les documents
 task cleanJavadoc(type: Delete) {
     delete "$buildDir/docs/javadoc"
 }
