@@ -48,6 +48,8 @@ public class GameScreen implements Screen {
     private Texture nextCardTexture;
     private String casinoType;
     private Skin skin;
+    private Label payerScorLabel;
+    private Label dealerScoreLabel;
 
     /**
      * Texture de la carte affichée à l'écran.
@@ -151,6 +153,12 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.distributeInitialCards();
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateScores();
+                    }
+                });
                 resultLabel.setText("");
                 restartButton.setVisible(false);
             }
@@ -160,6 +168,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.playerHits();
+                updateScores();
                 resultLabel.setText(gameLogic.getResultMessage());
                 if (!gameLogic.getResultMessage().isEmpty()) {
                     restartButton.setVisible(true); // Affiche le bouton si la partie est terminée
@@ -171,6 +180,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameLogic.playerStands();
+                updateScores();
                 resultLabel.setText(gameLogic.getResultMessage());
                 restartButton.setVisible(true); // Affiche le bouton lorsque la partie est terminée
             }
@@ -181,6 +191,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 // Réinitialise la logique du jeu
                 gameLogic.resetGame();
+                updateScores();
 
                 // Réinitialise l'affichage
                 resultLabel.setText(""); // Vide le message du résultat
@@ -191,9 +202,22 @@ public class GameScreen implements Screen {
             }
         });
 
-        // Vous pouvez initialiser ici d'autres ressources ou éléments spécifiques au
-        // moment
-        // où cet écran devient actif
+        payerScorLabel = new Label("Score du joueur: 0", skin);
+        payerScorLabel.setPosition(10, 150);
+        stage.addActor(payerScorLabel);
+
+        dealerScoreLabel = new Label("Score du croupier: 0", skin);
+        dealerScoreLabel.setPosition(10, 180);
+        stage.addActor(dealerScoreLabel);
+
+    }
+
+    private void updateScores() {
+        int playerScore = gameLogic.getPlayerScore();
+        int dealerScore = gameLogic.getDealerScore();
+
+        payerScorLabel.setText("Score du joueur: " + playerScore);
+        dealerScoreLabel.setText("Score du croupier: " + dealerScore);
     }
 
     /**
