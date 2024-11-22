@@ -46,6 +46,8 @@ public class GameScreen implements Screen {
     private GameLogic gameLogic;
     private Label resultLabel; // Pour afficher le message
     private Texture nextCardTexture;
+    private String casinoType;
+    private Skin skin;
 
     /**
      * Texture de la carte affichée à l'écran.
@@ -79,11 +81,23 @@ public class GameScreen implements Screen {
      * @param main référence à l'instance principale du jeu {@link Main}
      * @param skin skin utilisé pour l'interface utilisateur
      */
-    public GameScreen(Main main, Skin skin) {
+    public GameScreen(Main main, Skin skin, String casinoType) {
         this.main = main;
+        this.skin = skin;
         this.stage = new Stage(new FitViewport(1960, 1080));
         Gdx.input.setInputProcessor(stage);
         this.batch = new SpriteBatch();
+        this.casinoType = casinoType;
+    }
+
+    @Override
+    public void show() {
+        // Charger l'arrière-plan si ce n'est pas déjà fait
+        if (casinoType.equals("casino1")) {
+            backgroundTexture = new Texture(Gdx.files.internal("CasinoSuper.png"));
+        } else if (casinoType.equals("casino2")) {
+            backgroundTexture = new Texture(Gdx.files.internal("Background.jpg"));
+        }
 
         backButton = new TextButton("Retour au menu", skin);
 
@@ -176,6 +190,10 @@ public class GameScreen implements Screen {
                 gameLogic.distributeInitialCards(); // Relance la distribution initiale
             }
         });
+
+        // Vous pouvez initialiser ici d'autres ressources ou éléments spécifiques au
+        // moment
+        // où cet écran devient actif
     }
 
     /**
@@ -220,17 +238,6 @@ public class GameScreen implements Screen {
      * @param width  la nouvelle largeur de l'écran
      * @param height la nouvelle hauteur de l'écran
      */
-    @Override
-    public void show() {
-        // Charger l'arrière-plan si ce n'est pas déjà fait
-        if (backgroundTexture == null) {
-            backgroundTexture = new Texture(Gdx.files.internal("Background.jpg"));
-        }
-
-        // Vous pouvez initialiser ici d'autres ressources ou éléments spécifiques au
-        // moment
-        // où cet écran devient actif
-    }
 
     @Override
     public void resize(int width, int height) {
