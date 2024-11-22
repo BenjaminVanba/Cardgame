@@ -95,7 +95,7 @@ public class CasinoScreen implements Screen {
     public CasinoScreen(Main main, Skin skin) {
         this.main = main;
         this.skin = skin;
-        this.stage = new Stage(new FitViewport(800, 480));
+        this.stage = new Stage(new FitViewport(1960, 1080));
         Gdx.input.setInputProcessor(stage);
         this.batch = new SpriteBatch();
     }
@@ -106,25 +106,129 @@ public class CasinoScreen implements Screen {
      */
     @Override
     public void show() {
+        Gdx.app.log("CasinoScreen", "Méthode show() appelée");
+
+        // Charger les textures
         backgroundTexture = new Texture(Gdx.files.internal("Background2.png"));
         casino1Texture = new Texture(Gdx.files.internal("CasinoPourri.png"));
         casino2Texture = new Texture(Gdx.files.internal("CasinoPremium.png"));
+
+        // Créer les images
         casino1Image = new Image(casino1Texture);
         casino2Image = new Image(casino2Texture);
 
-        float imageWidth = 200;
-        float imageHeight = 200;
+        // Définir la taille des images
+        float imageWidth = 400;
+        float imageHeight = 400;
         casino1Image.setSize(imageWidth, imageHeight);
         casino2Image.setSize(imageWidth, imageHeight);
+
+        // Définir l'origine pour les actions d'animation
         casino1Image.setOrigin(Align.center);
         casino2Image.setOrigin(Align.center);
+
+        // Calculer la séparation et la largeur totale
         float separation = 50;
         float totalWidth = imageWidth * 2 + separation;
-        float startX = (800 - totalWidth) / 2;
-        float posY = (480 - imageHeight) / 2;
+
+        // Obtenir les dimensions actuelles de la viewport
+        float screenWidth = stage.getViewport().getWorldWidth(); // 1960
+        float screenHeight = stage.getViewport().getWorldHeight(); // 1080
+
+        // Calculer le point de départ X pour centrer les images
+        float startX = (screenWidth - totalWidth) / 2;
+
+        // Calculer le point Y pour centrer verticalement les images
+        float posY = (screenHeight - imageHeight) / 2;
+
+        // Positionner les images
         casino1Image.setPosition(startX, posY);
         casino2Image.setPosition(startX + imageWidth + separation, posY);
 
+        // Ajouter les images au stage
+        stage.addActor(casino1Image);
+        stage.addActor(casino2Image);
+
+        // Créer et positionner le titre
+        titleLabel = new Label("Choisissez votre casino :", skin);
+        float labelWidth = 400; // Ajustez selon besoin
+        float labelHeight = 50;
+        titleLabel.setSize(labelWidth, labelHeight);
+        titleLabel.setPosition((screenWidth - labelWidth) / 2, posY + imageHeight + 20);
+        stage.addActor(titleLabel);
+
+        // Ajouter les listeners pour les images
+        configureListeners();
+    }
+
+    /**
+     * Méthode appelée une fois par frame pour dessiner l'écran.
+     *
+     * @param delta le temps écoulé depuis la dernière frame en secondes
+     */
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
+
+        stage.act(delta);
+        stage.draw();
+    }
+
+    /**
+     * Libère les ressources utilisées par l'écran.
+     */
+    @Override
+    public void dispose() {
+        stage.dispose();
+        batch.dispose();
+        backgroundTexture.dispose();
+        casino1Texture.dispose();
+        casino2Texture.dispose();
+    }
+
+    /**
+     * Méthode appelée lorsqu'il y a un changement de taille de l'écran.
+     *
+     * @param width  la nouvelle largeur de l'écran
+     * @param height la nouvelle hauteur de l'écran
+     */
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    /**
+     * Méthode appelée lorsque le jeu est mis en pause.
+     */
+    @Override
+    public void pause() {
+        // Implémentation de la méthode pause() si nécessaire
+    }
+
+    /**
+     * Méthode appelée lorsque le jeu est repris après une pause.
+     */
+    @Override
+    public void resume() {
+        // Implémentation de la méthode resume() si nécessaire
+    }
+
+    /**
+     * Méthode appelée lorsque l'écran n'est plus le rendu courant pour le jeu.
+     */
+    @Override
+    public void hide() {
+        // Implémentation de la méthode hide() si nécessaire
+    }
+
+    /**
+     * Configure les écouteurs pour les images du casino.
+     */
+    private void configureListeners() {
         casino1Image.addListener(new ClickListener() {
             /**
              * Méthode appelée lors d'un clic sur la première image du casino.
@@ -212,79 +316,5 @@ public class CasinoScreen implements Screen {
                 casino2Image.addAction(Actions.scaleTo(1f, 1f, 0.1f));
             }
         });
-
-        titleLabel = new Label("Choisissez votre casino :", skin);
-
-        float labelX = 800 / 2f;
-        float labelY = posY + imageHeight + 20;
-        titleLabel.setPosition(labelX, labelY, Align.center);
-
-        stage.addActor(titleLabel);
-        stage.addActor(casino1Image);
-        stage.addActor(casino2Image);
-    }
-
-    /**
-     * Méthode appelée une fois par frame pour dessiner l'écran.
-     *
-     * @param delta le temps écoulé depuis la dernière frame en secondes
-     */
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.end();
-
-        stage.act(delta);
-        stage.draw();
-    }
-
-    /**
-     * Libère les ressources utilisées par l'écran.
-     */
-    @Override
-    public void dispose() {
-        stage.dispose();
-        batch.dispose();
-        backgroundTexture.dispose();
-        casino1Texture.dispose();
-        casino2Texture.dispose();
-    }
-
-    /**
-     * Méthode appelée lorsqu'il y a un changement de taille de l'écran.
-     *
-     * @param width  la nouvelle largeur de l'écran
-     * @param height la nouvelle hauteur de l'écran
-     */
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    /**
-     * Méthode appelée lorsque le jeu est mis en pause.
-     */
-    @Override
-    public void pause() {
-        // Implémentation de la méthode pause() si nécessaire
-    }
-
-    /**
-     * Méthode appelée lorsque le jeu est repris après une pause.
-     */
-    @Override
-    public void resume() {
-        // Implémentation de la méthode resume() si nécessaire
-    }
-
-    /**
-     * Méthode appelée lorsque l'écran n'est plus le rendu courant pour le jeu.
-     */
-    @Override
-    public void hide() {
-        // Implémentation de la méthode hide() si nécessaire
     }
 }
