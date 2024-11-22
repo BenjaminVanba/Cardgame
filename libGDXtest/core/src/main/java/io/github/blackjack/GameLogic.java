@@ -11,6 +11,8 @@ public class GameLogic extends Actor {
     HumanPlayer player;
     Dealer dealer;
     private String resultMessage = ""; // Message pour afficher le gagnant
+    private boolean gameFinished = true; // Indique si la partie est terminée
+    private boolean waitingForBet = true;
 
     public GameLogic(Stage stage) {
         this.stage = stage;
@@ -52,6 +54,9 @@ public class GameLogic extends Actor {
                 drawFromDeck(dealer, false);
             }
         }, 1.5f);
+
+        // Met fin à l'attente après la distribution
+        waitingForBet = false;
     }
 
     public void playerHits() {
@@ -82,6 +87,7 @@ public class GameLogic extends Actor {
 
         // Détermine le gagnant
         determineWinner();
+        gameFinished = true; // Marque la partie comme terminée
     }
 
     private void drawFromDeck(Player player, boolean isHidden) {
@@ -99,13 +105,17 @@ public class GameLogic extends Actor {
         if (dealer.hand.isBurnt() || playerScore > dealerScore) {
             if (dealer.hand.isBurnt()) {
                 resultMessage = "Vous avez gagné ! Le croupier s'est brûlé !";
+                this.gameFinished = true;
             } else {
                 resultMessage = "Vous avez gagné !";
+                this.gameFinished = true;
             }
         } else if (playerScore == dealerScore) {
             resultMessage = "Égalité !";
+            this.gameFinished = true;
         } else {
             resultMessage = "Le croupier a gagné !";
+            this.gameFinished = true;
         }
     }
 
@@ -113,10 +123,19 @@ public class GameLogic extends Actor {
         return resultMessage;
     }
 
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    public boolean isWaitingForBet() {
+        return waitingForBet;
+    }
+
     public void resetGame() {
-        // deck = new Deck(); // Réinitialise le deck
         player.hand.resetHand(); // Vide la main du joueur
         dealer.hand.resetHand(); // Vide la main du croupier
         resultMessage = ""; // Réinitialise le message
+        gameFinished = false;
+        waitingForBet = true; // Attend une mise pour redistribuer les cartes
     }
 }
