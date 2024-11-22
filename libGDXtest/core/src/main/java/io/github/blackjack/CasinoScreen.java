@@ -135,7 +135,7 @@ public class CasinoScreen implements Screen {
              */
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.showGameScreen();
+                main.showGameScreen("casino1");
             }
         });
 
@@ -149,7 +149,7 @@ public class CasinoScreen implements Screen {
              */
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.showGameScreen();
+                main.showGameScreen("casino2");
             }
         });
 
