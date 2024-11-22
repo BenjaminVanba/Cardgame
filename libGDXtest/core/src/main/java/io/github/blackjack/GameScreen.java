@@ -196,7 +196,12 @@ public class GameScreen implements Screen {
             if (nextCardTexture != null) {
                 nextCardTexture.dispose(); // Libérer la précédente texture
             }
-            nextCardTexture = new Texture(Gdx.files.internal(nextCard.getCardTexturePath())); // Charger la texture
+            if (nextCard.hidden) {
+                nextCardTexture = new Texture(Gdx.files.internal(nextCard.gethiddenCardTexturePath())); // Charger la
+                                                                                                        // texture
+            } else {
+                nextCardTexture = new Texture(Gdx.files.internal(nextCard.getCardTexturePath())); // Charger la texture
+            }
         }
 
         batch.begin();
