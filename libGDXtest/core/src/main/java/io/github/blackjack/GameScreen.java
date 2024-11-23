@@ -4,15 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Align;
 
 /**
  * La classe {@code GameScreen} représente l'écran de jeu principal dans le jeu
@@ -156,24 +161,24 @@ public class GameScreen implements Screen {
         });
 
         betButton = new TextButton("Mise", skin);
-        betButton.setSize(150, 50);
-        betButton.setPosition(10, 10);
+        betButton.setSize(300, 100);
+        betButton.setPosition(20, 800);
         stage.addActor(betButton);
 
         hitButton = new TextButton("Distribuer", skin);
-        hitButton.setSize(150, 50);
-        hitButton.setPosition(200, 10);
+        hitButton.setSize(300, 100);
+        hitButton.setPosition(20, 680);
         stage.addActor(hitButton);
 
         standButton = new TextButton("Rester", skin);
-        standButton.setSize(150, 50);
-        standButton.setPosition(400, 10);
+        standButton.setSize(300, 100);
+        standButton.setPosition(20, 560);
         stage.addActor(standButton);
 
         restartButton = new TextButton("Relancer", skin);
-        restartButton.setSize(150, 50);
-        restartButton.setPosition(10, 70); // Position différente des autres
-        restartButton.setVisible(false); // Caché par défaut
+        restartButton.setSize(300, 100);
+        restartButton.setPosition(20, 440);
+        restartButton.setVisible(false);
         stage.addActor(restartButton);
 
         resultLabel = new Label("", skin);
@@ -264,13 +269,60 @@ public class GameScreen implements Screen {
             }
         });
 
-        payerScorLabel = new Label("Score du joueur: 0", skin);
-        payerScorLabel.setPosition(10, 150);
-        stage.addActor(payerScorLabel);
+        // Positionner le score du croupier juste en dessous de son paquet en haut de
+        // l'écran avec un léger déplacement vers le bas
+        Pixmap dealerPixmap = new Pixmap(300, 80, Pixmap.Format.RGBA8888);
 
+        // Remplir le pixmap avec un fond semi-transparent
+        dealerPixmap.setColor(0, 0, 0, 0.6f); // Noir semi-transparent
+        dealerPixmap.fill();
+
+        // Dessiner la bordure
+        dealerPixmap.setColor(Color.WHITE); // Couleur de la bordure
+        dealerPixmap.drawRectangle(0, 0, dealerPixmap.getWidth(), dealerPixmap.getHeight());
+
+        // Créer un Drawable à partir du Pixmap
+        Drawable dealerBackground = new TextureRegionDrawable(new Texture(dealerPixmap));
+
+        // Libérer le pixmap (la texture gère le reste)
+        dealerPixmap.dispose();
+
+        // Créer le label du score du croupier
         dealerScoreLabel = new Label("Score du croupier: 0", skin);
-        dealerScoreLabel.setPosition(10, 180);
+        dealerScoreLabel.getStyle().background = dealerBackground;
+        dealerScoreLabel.setFontScale(1.5f);
+        dealerScoreLabel.setSize(dealerBackground.getMinWidth(), dealerBackground.getMinHeight());
+        dealerScoreLabel.setAlignment(Align.center);
+        dealerScoreLabel.setPosition(Gdx.graphics.getWidth() / 2 - dealerScoreLabel.getWidth() / 2,
+                Gdx.graphics.getHeight() - 410); // Ajusté la position
         stage.addActor(dealerScoreLabel);
+
+        // Créer un Pixmap pour le fond du joueur avec bordure et transparence
+        Pixmap playerPixmap = new Pixmap(300, 80, Pixmap.Format.RGBA8888);
+
+        // Remplir le pixmap avec un fond semi-transparent
+        playerPixmap.setColor(0, 0, 0, 0.6f); // Noir semi-transparent
+        playerPixmap.fill();
+
+        // Dessiner la bordure
+        playerPixmap.setColor(Color.WHITE); // Couleur de la bordure
+        playerPixmap.drawRectangle(0, 0, playerPixmap.getWidth(), playerPixmap.getHeight());
+
+        // Créer un Drawable à partir du Pixmap
+        Drawable playerBackground = new TextureRegionDrawable(new Texture(playerPixmap));
+
+        // Libérer le pixmap
+        playerPixmap.dispose();
+
+        // Créer le label du score du joueur
+        payerScorLabel = new Label("Score du joueur: 0", skin);
+        payerScorLabel.getStyle().background = playerBackground;
+        payerScorLabel.setFontScale(1.5f);
+        payerScorLabel.setSize(playerBackground.getMinWidth(), playerBackground.getMinHeight());
+        payerScorLabel.setAlignment(Align.center);
+        payerScorLabel.setPosition(Gdx.graphics.getWidth() / 2 - payerScorLabel.getWidth() / 2,
+                360); // Ajusté la position
+        stage.addActor(payerScorLabel);
 
     }
 
