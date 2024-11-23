@@ -80,7 +80,7 @@ public class MenuScreen implements Screen {
     public MenuScreen(Main main, Skin skin) {
         this.main = main;
         this.skin = skin;
-        this.stage = new Stage(new FitViewport(800, 480));
+        this.stage = new Stage(new FitViewport(1960, 1080));
         Gdx.input.setInputProcessor(stage);
         this.batch = new SpriteBatch();
     }
@@ -91,25 +91,42 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void show() {
+        Gdx.app.log("MenuScreen", "Méthode show() appelée");
+
+        // Charger l'arrière-plan
         backgroundTexture = new Texture(Gdx.files.internal("Background2.png"));
 
+        // Créer les boutons
         startButton = new TextButton("Commencer la partie", skin);
         optionsButton = new TextButton("Options", skin);
         quitButton = new TextButton("Quitter", skin);
 
-        startButton.setSize(200, 50);
-        startButton.setPosition(300, 270);
+        // Définir la taille des boutons
+        float buttonWidth = 200f;
+        float buttonHeight = 50f;
+        startButton.setSize(buttonWidth, buttonHeight);
+        optionsButton.setSize(buttonWidth, buttonHeight);
+        quitButton.setSize(buttonWidth, buttonHeight);
 
-        optionsButton.setSize(200, 50);
-        optionsButton.setPosition(300, 210);
+        // Calculer les positions centrées
+        float screenWidth = 1960f;
+        float screenHeight = 1080f;
 
-        quitButton.setSize(200, 50);
-        quitButton.setPosition(300, 150);
+        float totalHeight = 3 * buttonHeight + 2 * 20f; // 190
+        float startY = (screenHeight + totalHeight) / 2 - buttonHeight; // 585
+        float centerX = (screenWidth / 2) - (buttonWidth / 2); // 880
 
+        // Positionner les boutons
+        startButton.setPosition(centerX, startY); // 880, 585
+        optionsButton.setPosition(centerX, startY - buttonHeight - 20f); // 880, 515
+        quitButton.setPosition(centerX, startY - 2 * (buttonHeight + 20f)); // 880, 445
+
+        // Ajouter les boutons au stage
         stage.addActor(startButton);
         stage.addActor(optionsButton);
         stage.addActor(quitButton);
 
+        // Ajouter les listeners pour les boutons
         startButton.addListener(new ClickListener() {
             /**
              * Méthode appelée lors d'un clic sur le bouton de démarrage de la partie.
@@ -134,7 +151,7 @@ public class MenuScreen implements Screen {
              */
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.SettingsScreen();
+                main.SettingsScreen(); // Correction de la méthode (majuscule en minuscule)
             }
         });
 

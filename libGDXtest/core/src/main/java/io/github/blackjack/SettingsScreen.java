@@ -79,7 +79,7 @@ public class SettingsScreen implements Screen {
     public SettingsScreen(Main main, Skin skin) {
         this.main = main;
         this.skin = skin;
-        this.stage = new Stage(new FitViewport(800, 480));
+        this.stage = new Stage(new FitViewport(1960, 1080));
         Gdx.input.setInputProcessor(stage);
         this.batch = new SpriteBatch();
     }
