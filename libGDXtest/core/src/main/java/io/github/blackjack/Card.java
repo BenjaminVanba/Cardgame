@@ -85,6 +85,10 @@ public class Card {
         this.hiddenCardTexturePath = "Cards/cardback.png";
     }
 
+    public void setHidden(boolean isHidden) {
+        this.hidden = isHidden; // Met à jour l'état de visibilité
+    }
+
     public void DisplayInfo(Card card) {
         System.out.println("* " + card.getValue() + " de " + card.getSuit() + " *");
     }
