@@ -88,6 +88,11 @@ public class GameScreen implements Screen {
     private Dealer dealer;
     private HumanPlayer player;
 
+    private Label deckCountLabel; // Label pour afficher le nombre de cartes
+
+    private TextButton cheatButton; // Bouton pour tricher
+    private Label cheatLabel; // Affiche la prochaine carte visible
+
     public GameScreen(Main main, Skin skin, String casinoType) {
         this.main = main;
         this.skin = skin;
@@ -103,6 +108,10 @@ public class GameScreen implements Screen {
 
         // Instanciez GameLogic avec les joueurs existants
         gameLogic = new GameLogic(stage, dealer, player);
+
+        deckCountLabel = new Label("Cartes restantes: " + gameLogic.deck.getRemainingCards(), skin);
+        deckCountLabel.setPosition(1920 / 2 + 700, 1080 / 2 - 230); // Juste en dessous de l'affichage du deck
+        stage.addActor(deckCountLabel);
 
         // Réinitialiser les positions et mains des joueurs
         // gameLogic.player.resetPositionAndHand();
@@ -232,10 +241,26 @@ public class GameScreen implements Screen {
 
                 gameLogic.resetGame(); // Réinitialise la logique du jeu
 
-
                 updateScores();
                 resultLabel.setText(""); // Efface le résultat précédent
                 updateButtonVisibility(); // Met à jour l'affichage des boutons
+            }
+        });
+
+        // Bouton "Tricher"
+        cheatButton = new TextButton("Tricher", skin);
+        cheatButton.setSize(150, 50);
+        cheatButton.setPosition(1920 / 2 + 700, 1080 / 2 - 330); // Positionné en bas à gauche
+        stage.addActor(cheatButton);
+
+        // Listener pour le bouton "Tricher"
+        cheatButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    gameLogic.deck.toggleDeckVisibility();
+                } catch (IllegalStateException e) {
+                }
             }
         });
 
@@ -292,6 +317,11 @@ public class GameScreen implements Screen {
             float cardY = (Gdx.graphics.getHeight() / 2) - (cardHeight / 2); // Centré verticalement
             batch.draw(nextCardTexture, cardX, cardY, cardWidth, cardHeight);
         }
+
+        // Mettre à jour le label du nombre de cartes restantes
+        deckCountLabel.setText("Cartes restantes: " + gameLogic.deck.getRemainingCards());
+        updateScores();
+
         batch.end();
 
         stage.act(delta);

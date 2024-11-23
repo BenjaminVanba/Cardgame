@@ -23,7 +23,7 @@ public class GameLogic extends Actor {
         stage.addActor(this.dealer);
         stage.addActor(this.player);
 
-        this.deck = new Deck(); // Initialisation du deck
+        this.deck = new Deck(6); // Initialisation du deck
         resetGame(); // Réinitialise l'état du jeu
     }
 
