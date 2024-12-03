@@ -112,3 +112,8 @@ Un diagramme UML détaillant les relations entre les classes est disponible dans
 
    ```bash
    git clone <url-du-dépôt>
+
+2. **Lancer le jeu :**
+   
+   ```bash
+   ./gradlew run
